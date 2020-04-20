@@ -42,20 +42,6 @@
     "avg_school_rating": 6.3
   },
   {
-    "school_district": "Baltimore County Public School District",
-    "county": "Baltimore City",
-    "state": "MD",
-    "median_list_price_district": 250000,
-    "median_list_price_county": 229000,
-    "list_price_premium_vs_county": 1.09,
-    "listing_views_vs_county": 1,
-    "days_on_market_district": 51,
-    "days_on_market_county": 55,
-    "days_on_market_vs_county": 0.93,
-    "median_days_on_market_vs_county": -4,
-    "avg_school_rating": 6.7
-  },
-  {
     "school_district": "Anne Arundel County Public School District",
     "county": "Baltimore City",
     "state": "MD",
@@ -124,21 +110,7 @@
     "days_on_market_vs_county": 1,
     "median_days_on_market_vs_county": 0,
     "avg_school_rating": 6.1
-  },
-  {
-    "school_district": "Carroll County Public School District",
-    "county": "Frederick",
-    "state": "MD",
-    "median_list_price_district": 424000,
-    "median_list_price_county": 330000,
-    "list_price_premium_vs_county": 1.28,
-    "listing_views_vs_county": 1.2432,
-    "days_on_market_district": 53,
-    "days_on_market_county": 52,
-    "days_on_market_vs_county": 1.01,
-    "median_days_on_market_vs_county": 1,
-    "avg_school_rating": 8
-  },
+},
   {
     "school_district": "Frederick County Public School District",
     "county": "Frederick",
