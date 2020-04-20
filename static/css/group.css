@@ -1,0 +1,33 @@
+body {
+    background: #fff;
+    margin: 0;
+}
+
+svg {
+    transform: rotate(11.3deg);
+}
+
+path {
+    fill: #eee;
+}
+
+path:hover{
+    fill: #ddd;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 80px;
+    font-size: 12px;
+    padding: 8px;
+    background: white;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    color: #000;
+}
+
+.legend {
+        transform: rotate(0deg);
+}
