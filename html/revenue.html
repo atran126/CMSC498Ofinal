@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> Campaign Finance Data Visualization</title>
+  <link rel="stylesheet" type="text/css" href="./static/revenue.css"></link>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script type="text/javascript" src="../static/revenue_breakdown.js"></script>
+
+</head>
+<label for="fname">County:</label>
+<input type="text" id="county" name="fname"><br><br>
+
+<input type="button" onclick="submission()" value="submit">
+<svg id="vis" width="600" height="600"></svg>
