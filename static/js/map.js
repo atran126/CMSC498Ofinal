@@ -2,9 +2,8 @@ var bgColor = "#eee";
 var width = 1400;
 var height = 700;
 
-// Input from map HTML
 function submission() {
-  
+  rsubmission();
 }
 
 // D3 Projection
