@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Group</title>
+    <title>Group Project</title>
     <script src="./static/js/d3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="./static/css/group.css">
@@ -10,9 +10,39 @@
 </head>
 
 <body>
-    <div id="map">
+  <p>
 
-    </div>
+    <select id = "county" onclick = "submission()">
+    <option onclick="submission()" value = "AL">Allegany County</option>
+    <option onclick="submission()" value = "AK">Anne Arundel County</option>
+    <option onclick="submission()" value = "AZ">Baltimore County</option>
+    <option onclick="submission()" value = "CA">Baltimore City</option>
+    <option onclick="submission()" value = "CO">Calvert County</option>
+    <option onclick="submission()" value = "CT">Caroline County</option>
+    <option onclick="submission()" value = "DE">Carroll County</option>
+    <option onclick="submission()" value = "FL">Cecil County</option>
+    <option onclick="submission()" value = "GA">Charles County</option>
+    <option onclick="submission()" value = "ID">Dorchester County</option>
+    <option onclick="submission()" value = "IL">Frederick County</option>
+    <option onclick="submission()" value = "IN">Garrett County</option>
+    <option onclick="submission()" value = "IA">Harford County</option>
+    <option onclick="submission()" value = "KS">Howard County</option>
+    <option onclick="submission()" value = "KY">Kent County</option>
+    <option onclick="submission()" value = "LA">Montgomery County</option>
+    <option onclick="submission()" value = "ME">Prince George's County</option>
+    <option onclick="submission()" value = "MD">Queen Anne's County</option>
+    <option onclick="submission()" value = "MA">Somerset County</option>
+    <option onclick="submission()" value = "MI">St. Mary's County</option>
+    <option onclick="submission()" value = "MN">Talbot County</option>
+    <option onclick="submission()" value = "MS">Washington County</option>
+    <option onclick="submission()" value = "MO">Wicomico County</option>
+    <option onclick="submission()" value = "MT">Worcester County</option>
+    </select>
+</p>
+
+        <div id="map">
+
+        </div>
 
     <script src="./static/js/map.js"></script>
 </body>

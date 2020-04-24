@@ -2,6 +2,11 @@ var bgColor = "#eee";
 var width = 1400;
 var height = 700;
 
+// Input from map HTML
+function submission() {
+  
+}
+
 // D3 Projection
 var projection = d3.geoAlbersUsa()
     .translate([-3400, 800])
