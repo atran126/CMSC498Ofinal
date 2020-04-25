@@ -85,43 +85,13 @@ function createChart(data) {
           .attr('y1', countyY)
           .attr('x2', width)
           .attr('y2', countyY);
-
-
-          // svgChart.append('text')
-          // .data(data)
-          // .attr('class', "divergence")
-          // .attr('x', d => x(d.NAME) + x.bandwidth() / 2)
-          // .attr('y', d => y(d.TOTALREV) + 30)
-          // .attr('fill', 'white')
-          // .attr('text-anchor', 'middle')
-          // .text((d, idx) => {
-          //   const divergence = (d.TOTALREV - actual.TOTALREV).toFixed(1)
-    
-          //   let text = ''
-          //   if (divergence > 0) text += '+'
-          //   text += `${divergence}%`
-    
-          //   return idx !== i ? text : '';
-          // });
       })
-      // .on('mouseleave', function() {
-      //   d3.selectAll('.value')
-      //     .attr('opacity', 1)
-
-      //   d3.select(this)
-      //     .transition()
-      //     .duration(300)
-      //     .attr('opacity', 1)
-      //     .attr('x', (a) => x(a.language))
-      //     .attr('width', x.bandwidth())
-    
-      //     svgChart.selectAll("line-limit").remove()
-      //     svgChart.selectAll("divergence").remove()
-      // })
+         
 
       
 };
 
+function filterData(data, year)
 function getData() {
   return new Promise((resolve, reject) => {
     var data_arr = [];
