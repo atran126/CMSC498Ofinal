@@ -2,10 +2,12 @@ var margins = {tp: 20, btm: 180, lft: 80, rt: 30};
 var width = 600;
 var height = 600;
 
-function rsubmission() {
+function submission() {
+  console.log("Hello");
 
     var county = document.getElementById("county").value;
     var chart = document.getElementById("vis");
+
     getData()
     .then(jsonTuples => { // renders the data table
       createChart(jsonTuples, county, chart);
@@ -14,6 +16,7 @@ function rsubmission() {
   }
 
 function createChart(jsonTuples, county, chart) {
+  chart.innerHTML = "";
   data = filterData(county, jsonTuples);
   var revenue = ["Total", "Federal", "State", "Local"];
 
@@ -36,7 +39,13 @@ function createChart(jsonTuples, county, chart) {
         .attr("y", d => margins.tp + hScale(d.value) + "px")
         .attr("width", xBand.bandwidth())
         .attr("height", d=> (height - margins.tp - margins.btm - hScale(d.value)))
-        .attr("fill", "red");
+        .attr("fill", "red")
+        .append("svg:title")
+
+      .text(function(d) {
+        console.log(d.display);
+        return d.display;
+      });
 
         // X-axis
         d3.select(chart).append("g")
@@ -79,10 +88,25 @@ function filterData(county, jsonTuples) {
       federal.value= j.TFEDREV;
       federal.name = "Federal";
 
+      federal.display = "Compensatory(Title I): " + j.FEDRCOMP;
+      federal.display += "\n Children with disabilites: " + j.FEDRSPEC;
+      federal.display += "\n Child Nutrition Act: " + j.FEDRNUTR;
+      federal.display += "\n All other federal aid: " + j.FEDROTHR;
+
+
       state.value = j.TSTREV;
       state.name = "State";
+      state.display = "General formula assistance: " + j.STRFORM;
+      state.display = "\nSpecial education programs: " + j.STRSPEC;
+      state.display = "\nTransportation programs: " + j.STRTRANS;
+      state.display = "\nAll other state revenue: " + j.STROTHR;
+
       local.value= j.TLOCREV;
       local.name = "Local";
+      local.display = "Parent government contributions : " + j.T02;
+      local.display += "\nTransportation Fees: " + j.A08;
+      local.display += "\nSchool lunch revenues: " + j.A09;
+      local.display += "\nOther sales and service revenues: " + j.A20;
 
       // Add objects to array
       obj.push(total);

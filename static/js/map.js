@@ -1,5 +1,5 @@
 var bgColor = "#eee";
-var width = 1400;
+var width = 1200;
 var height = 700;
 
 function submission() {
