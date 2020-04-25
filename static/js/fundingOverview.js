@@ -19,10 +19,10 @@ function createChart(data) {
    
       // sort data
     data.sort(function(b, a) {
-      return a.TOTALREV - b.TOTALREV;
+      return a.PPCSTOT - b.PPCSTOT;
     });
 
-    data.forEach((d) => console.log(d.NAME, d.TOTALREV));
+    data.forEach((d) => console.log(d.NAME, d.PPCSTOT));
     
     // append the svg object to the body of the page
     var svgChart = d3.select(chart)
@@ -47,7 +47,7 @@ function createChart(data) {
 
     // Y axis
     var y = d3.scaleLinear()
-    .domain([0, data[0].TOTALREV])
+    .domain([0, data[0].PPCSTOT])
     .range([ height, 0]);
     svgChart.append("g")
     .call(d3.axisLeft(y));
@@ -68,15 +68,15 @@ function createChart(data) {
     .enter()
     .append("rect")
       .attr("x", function(d) { return x(d.NAME); })
-      .attr("y", function(d) { return y(d.TOTALREV); })
+      .attr("y", function(d) { return y(d.PPCSTOT); })
       .attr("width", x.bandwidth())
-      .attr("height", function(d) { return height - y(d.TOTALREV); })
+      .attr("height", function(d) { return height - y(d.PPCSTOT); })
       .attr("fill", function(d) {if (d.NAME == county) return "red"; else return "#69b3a2"})
       .on('mouseenter', function(actual, i) {
         d3.selectAll('.value')
         .attr('opacity', 0)
 
-        const countyY = y(actual.TOTALREV)
+        const countyY = y(actual.PPCSTOT)
         console.log("selected", actual, countyY);
 
         svgChart.append('line')
@@ -91,7 +91,6 @@ function createChart(data) {
       
 };
 
-function filterData(data, year)
 function getData() {
   return new Promise((resolve, reject) => {
     var data_arr = [];
