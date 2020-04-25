@@ -2,14 +2,40 @@
 <html>
 
 <head>
-  <title> Campaign Finance Data Visualization</title>
-  <link rel="stylesheet" type="text/css" href="./static/revenue.css"></link>
-<script src="https://d3js.org/d3.v5.min.js"></script>
-<script type="text/javascript" src="../static/revenue_breakdown.js"></script>
-
+  <title> Revenue</title>
+  <link rel="stylesheet" type="text/css" href="../static/css/revenue.css"></link>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="../static/js/revenue_breakdown.js"></script>
 </head>
-<label for="fname">County:</label>
-<input type="text" id="county" name="fname"><br><br>
 
-<input type="button" onclick="submission()" value="submit">
+<p>
+
+  <select id = "county" onclick = "submission()">
+    <option value = "se">Select county</option>
+    <option onclick="submission()" value = "ALLEGANY COUNTY PUBLIC SCHOOLS">Allegany County</option>
+    <option onclick="submission()" value = "ANNE ARUNDEL CO SCHS">Anne Arundel County</option>
+    <option onclick="submission()" value = "BALTIMORE COUNTY SCHOOLS">Baltimore County</option>
+    <option onclick="submission()" value = "BALTIMORE CITY SCHOOLS">Baltimore City</option>
+    <option onclick="submission()" value = "CALVERT CO SCHS">Calvert County</option>
+    <option onclick="submission()" value = "CAROLINE CO SCHS">Caroline County</option>
+    <option onclick="submission()" value = "CARROLL CO SCHS">Carroll County</option>
+    <option onclick="submission()" value = "CECIL COUNTY PUBLIC SCHOOLS">Cecil County</option>
+    <option onclick="submission()" value = "CHARLES CO SCHS">Charles County</option>
+    <option onclick="submission()" value = "DORCHESTER CO SCHS">Dorchester County</option>
+    <option onclick="submission()" value = "FREDERICK CO SCHOOLS">Frederick County</option>
+    <option onclick="submission()" value = "GARRETT COUNTY SCHOOLS">Garrett County</option>
+    <option onclick="submission()" value = "HARFORD CO SCH">Harford County</option>
+    <option onclick="submission()" value = "HOWARD COUNTY SCHOOLS">Howard County</option>
+    <option onclick="submission()" value = "KENT COUNTY SCHOOLS">Kent County</option>
+    <option onclick="submission()" value = "MONTGOMERY COUNTY SCHOOLS">Montgomery County</option>
+    <option onclick="submission()" value = "PRINCE GEORGES CO SCHS">Prince George's County</option>
+    <option onclick="submission()" value = "QUEEN ANNES COUNTY SCHOOLS">Queen Anne's County</option>
+    <option onclick="submission()" value = "SOMERSET CO SCHS">Somerset County</option>
+    <option onclick="submission()" value = "ST MARYS CO SCHS">St. Mary's County</option>
+    <option onclick="submission()" value = "TALBOT CO SCHS">Talbot County</option>
+    <option onclick="submission()" value = "WASHINGTON CO SCHS">Washington County</option>
+    <option onclick="submission()" value = "WICOMICO CO SCHOOLS">Wicomico County</option>
+    <option onclick="submission()" value = "WORCESTER CO BOARD OF EDUCATION">Worcester County</option>
+  </select>
+</p>
 <svg id="vis" width="600" height="600"></svg>
