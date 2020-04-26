@@ -3,16 +3,7 @@ body {
     margin: 0;
 }
 
-rect:hover {
-  opacity: 0.7;
-}
-
-.label, a, p {
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  font-size: 16px;
-}
-
-svg {
+#map svg {
     transform: rotate(11.3deg);
 }
 
@@ -45,7 +36,7 @@ path:hover{
         transform: rotate(0deg);
 }
 
-#form, select#county  {
+#form, select#dropdown  {
     position: relative;
 z-index: 999;
 }
