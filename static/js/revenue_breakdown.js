@@ -5,7 +5,6 @@ $(document).ready(function() {
 
     d3.csv("http://localhost:8080/../../data/countyfunding.csv")
         .then(jsonTuples => {
-            console.log(jsonTuples);
             $("#dropdown").change(function() {
                 createChart(jsonTuples, this.value, chart);
             });
@@ -21,7 +20,7 @@ var margins = {
     lft: 80,
     rt: 30
 };
-var width = 1500;
+var width = 1200;
 var height = 600;
 
 function submission() {
@@ -38,6 +37,7 @@ function createChart(jsonTuples, county, chart) {
     // console.log(chart);
     // chart.innerHTML = "";
     $("#vis").empty();
+    console.log(county);
     data = filterData(county, jsonTuples);
     var revenue = ["Total", "Federal", "State", "Local"];
     var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
@@ -50,8 +50,8 @@ function createChart(jsonTuples, county, chart) {
 
     // Height scale function
     var hScale = d3.scaleLinear()
-        // .domain([1, data[0].value])
-        .domain([1, 3000000])
+        .domain([1, data[0].value])
+        //.domain([1, 3000000])
         .range([height - margins.btm - margins.tp, 0]);
 
     // Creates bar chart
@@ -65,11 +65,10 @@ function createChart(jsonTuples, county, chart) {
         .attr("y", d => margins.tp + hScale(d.value) + "px")
         .attr("width", xBand.bandwidth())
         .attr("height", d => (height - margins.tp - margins.btm - hScale(d.value)))
-        .attr("fill", "red")
+        .attr("fill", "#b72506")
         .append("svg:title")
 
         .text(function(d) {
-            console.log(d.display);
             return d.display;
         });
 
@@ -94,12 +93,12 @@ function createChart(jsonTuples, county, chart) {
         .style("text-anchor", "middle")
         .text("Revenue ($)");
 
+
 }
 
 // Filters the json data so that it only returns funding for a specific county
 function filterData(county, jsonTuples) {
     var obj = [];
-    console.log(county);
     jsonTuples.forEach((j) => {
         if (j.NAME === county) {
             console.log(county, j);
@@ -129,8 +128,10 @@ function filterData(county, jsonTuples) {
             // Adding items for tooltip
             state.display = "Total state funding: $" + j.TSTREV;
             state.display += "\nGeneral formula assistance: $" + j.C01;
-            state.display += "\nStaff improvement programs: $" + j.C04;
             state.display += "\nSpecial education programs: $" + j.C05;
+            state.display += "\nCompensatory and basic skills attainment programs : $" + j.C06;
+            state.display += "\nBilingual Education programs : $" + j.C07;
+            state.display += "\nSchool Lunch programs : $" + j.C10;
             state.display += "\nTransportation programs: $" + j.C12;
             state.display += "\nAll other state revenue: $" + j.C13;
 
