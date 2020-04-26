@@ -3,7 +3,7 @@ body {
     margin: 0;
 }
 
-svg {
+#map svg {
     transform: rotate(11.3deg);
 }
 
@@ -32,7 +32,7 @@ path:hover{
         transform: rotate(0deg);
 }
 
-#form, select#county  {
+#form, select#dropdown  {
     position: relative;
 z-index: 999;
 }
