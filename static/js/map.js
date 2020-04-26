@@ -3,9 +3,9 @@ var bgColor = "#eee";
 var width = 1200;
 var height = 700;
 
-function submission() {
-    rsubmission();
-}
+// function submission() {
+//     rsubmission();
+// }
 
 // D3 Projection
 var projection = d3.geoAlbersUsa()
@@ -226,5 +226,6 @@ function getCategory(num) {
 
 function getFormData() {
     var data = $("#form").serializeArray();
-    return data[0].value;
+    console.log(data);
+    return !data.length == 0 ? data[0].value : "";
 }
