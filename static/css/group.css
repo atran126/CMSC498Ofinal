@@ -31,3 +31,8 @@ path:hover{
 .legend {
         transform: rotate(0deg);
 }
+
+#form {
+    position: relative;
+z-index: 999;
+}
