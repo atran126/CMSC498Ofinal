@@ -3,8 +3,21 @@ body {
     margin: 0;
 }
 
+rect:hover {
+  opacity: 0.7;
+}
+
+.label, a, p {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+}
+
 svg {
     transform: rotate(11.3deg);
+}
+
+#vis {
+    transform: rotate(0deg);
 }
 
 path {

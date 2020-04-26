@@ -1,5 +1,5 @@
 var margins = {tp: 20, btm: 180, lft: 80, rt: 30};
-var width = 600;
+var width = 1200;
 var height = 600;
 
 function submission() {
