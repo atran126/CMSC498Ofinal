@@ -37,7 +37,7 @@ function CSVtoArray(text) {
 };
 // Some code from https://stackoverflow.com/questions/28543821/convert-csv-lines-into-javascript-objects/28544299
 app.get('/', function(req, res){
-  readFile('countyfunding.csv').then(data => {
+  readFile('data/countyfunding.csv').then(data => {
 
   //Convert and store csv information into a buffer.
   bufferString = data.toString();

@@ -1,7 +1,11 @@
 var legend;
 var bgColor = "#eee";
-var width = 1400;
+var width = 1200;
 var height = 700;
+
+function submission() {
+    rsubmission();
+}
 
 // D3 Projection
 var projection = d3.geoAlbersUsa()
