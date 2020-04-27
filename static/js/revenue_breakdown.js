@@ -37,7 +37,6 @@ function createChart(jsonTuples, county, chart) {
     // console.log(chart);
     // chart.innerHTML = "";
     $("#vis").empty();
-    console.log(county);
     data = filterData(county, jsonTuples);
     var revenue = ["Total", "Federal", "State", "Local"];
     var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
@@ -101,8 +100,6 @@ function filterData(county, jsonTuples) {
     var obj = [];
     jsonTuples.forEach((j) => {
         if (j.NAME === county) {
-            console.log(county, j);
-            console.log("Hello there");
 
             // Create objects for each type of funding
             var total = {};
