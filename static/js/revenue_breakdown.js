@@ -102,7 +102,6 @@ function filterData(county, jsonTuples) {
     console.log(county);
     jsonTuples.forEach((j) => {
         if (j.NAME === county) {
-            console.log(county, j);
             console.log("Hello there");
 
             // Create objects for each type of funding
