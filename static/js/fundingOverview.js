@@ -15,10 +15,11 @@ $(document).ready(function() {
 
             $("#dropdown").change(function() {
                 county = this.value;
+                createChart(data);
             })
 
             console.log("hi");
-            createChart(data);
+
 
             function createChart(data) {
                 console.log("hi again");
