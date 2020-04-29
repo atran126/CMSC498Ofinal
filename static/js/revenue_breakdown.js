@@ -6,6 +6,9 @@ $(document).ready(function() {
     d3.csv("http://localhost:8080/../../data/countyfunding.csv")
         .then(jsonTuples => {
             $("#dropdown").change(function() {
+                // update HTML attribute so current county is accessible
+                document.getElementById("dropdown").setAttribute("county", this.value);
+
                 createChart(jsonTuples, this.value, chart);
             });
 

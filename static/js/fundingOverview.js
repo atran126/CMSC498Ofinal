@@ -14,12 +14,14 @@ $(document).ready(function() {
         .then(data => {
 
             $("#dropdown").change(function() {
+                // update HTML attribute so current county is accessible
+                document.getElementById("dropdown").setAttribute("county", this.value);
                 county = this.value;
                 createChart(data);
             })
 
             console.log("hi");
-
+            console.log("funding overview");
 
             function createChart(data) {
                 console.log("hi again");
@@ -50,6 +52,7 @@ $(document).ready(function() {
                         return d.NAME;
                     }))
                     .padding(0.2);
+                
                 svgChart.append("g")
                     .attr("transform", "translate(0," + height + ")")
                     .call(d3.axisBottom(x))
