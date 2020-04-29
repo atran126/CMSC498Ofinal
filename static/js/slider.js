@@ -4,19 +4,21 @@ d3.json("http://localhost:8080/../../data/yeardata.json")
   })
   .catch((e) => console.log(e));
 
+// when the time slider changes, need to update each graph accordingly 
 function updateRevenueGraph(allData) {
+  // get necessary variables
   var year = document.getElementById("time-div").getAttribute("year");
   var county = document.getElementById("dropdown").getAttribute("county");
   var chart = document.getElementById("vis");
 
+  // isolate the county data
   var countyData = getCountyData(allData, year, county);
 
+  // within county data, get data to graph 
   var graphData = isolateData(countyData);
 
-  // console.log("Graph data: ", graphData);
 
   $("#vis").empty();
-  // data = filterData(county, jsonTuples);
   var revenue = ["Total", "Federal", "State", "Local"];
   var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
 
@@ -35,7 +37,6 @@ function updateRevenueGraph(allData) {
     .range([height - margins.btm - margins.tp, 0]);
 
   // Creates bar chart
-
   d3.select(chart)
     .selectAll("rect")
     .data(graphData)
@@ -79,7 +80,7 @@ function updateRevenueGraph(allData) {
 function getCountyData(allData, year, county) {
   for (var i = 0; i < allData.length; i++) {
     if (allData[i].year === parseInt(year)) {
-      console.log(allData[i].year);
+      // console.log(allData[i].year);
       return allData[i].data[county];
     }
   }
@@ -135,8 +136,7 @@ function timeHandler(allData) {
       // document.getElementById("time-label").setAttribute("year", currYear);
       d3.select("p#time-label").text(currYear);
 
-      //  update graphs here ?
-
+      //  update graphs here 
       updateRevenueGraph(allData);
     });
 
