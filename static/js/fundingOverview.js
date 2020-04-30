@@ -20,21 +20,21 @@ $(document).ready(function() {
                 createChart(data);
             })
 
-            console.log("hi");
             console.log("funding overview");
 
             function createChart(data) {
-                console.log("hi again");
+                $("#funding-overview").empty();
+
                 // var county = document.getElementById("county").value;
                 var chart = document.getElementById("funding-overview");
-                // console.log("county", county)
 
                 // sort data
                 data.sort(function(b, a) {
                     return a.TOTALREV - b.TOTALREV;
                 });
 
-                data.forEach((d) => console.log(d.NAME, d.TOTALREV));
+                // this logs each county name and total revenue 
+                // data.forEach((d) => console.log(d.NAME, d.TOTALREV));
 
                 // append the svg object to the body of the page
                 var svgChart = d3.select(chart)

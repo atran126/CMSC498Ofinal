@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     var dropdown = document.getElementById("dropwdown");
-    var chart = document.getElementById("vis");
+    var chart = document.getElementById("revenue-breakdown");
 
     d3.csv("http://localhost:8080/../../data/countyfunding.csv")
         .then(jsonTuples => {
@@ -39,7 +39,7 @@ function submission() {
 function createChart(jsonTuples, county, chart) {
     // console.log(chart);
     // chart.innerHTML = "";
-    $("#vis").empty();
+    $("#revenue-breakdown").empty();
     data = filterData(county, jsonTuples);
     var revenue = ["Total", "Federal", "State", "Local"];
     var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
