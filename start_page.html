@@ -2,92 +2,105 @@
 <html>
 
 <head>
-    <title>Group Project</title>
+    <title>School Funding & Housing Prices</title>
     <script src="./static/js/d3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
-    <script src="./static/js/revenue_breakdown.js"></script>
     <link rel="stylesheet" type="text/css" href="./static/css/group.css">
+    <script src="https://unpkg.com/d3-simple-slider"></script>
 
 </head>
 
 <body>
-  <p>
-
-    <select id = "county" onclick = "submission()">
-      <option value = "se">Select county</option>
-      <option onclick="submission()" value = "ALLEGANY COUNTY PUBLIC SCHOOLS">Allegany County</option>
-      <option onclick="submission()" value = "ANNE ARUNDEL CO SCHS">Anne Arundel County</option>
-      <option onclick="submission()" value = "BALTIMORE COUNTY SCHOOLS">Baltimore County</option>
-      <option onclick="submission()" value = "BALTIMORE CITY SCHOOLS">Baltimore City</option>
-      <option onclick="submission()" value = "CALVERT CO SCHS">Calvert County</option>
-      <option onclick="submission()" value = "CAROLINE CO SCHS">Caroline County</option>
-      <option onclick="submission()" value = "CARROLL CO SCHS">Carroll County</option>
-      <option onclick="submission()" value = "CECIL COUNTY PUBLIC SCHOOLS">Cecil County</option>
-      <option onclick="submission()" value = "CHARLES CO SCHS">Charles County</option>
-      <option onclick="submission()" value = "DORCHESTER CO SCHS">Dorchester County</option>
-      <option onclick="submission()" value = "FREDERICK CO SCHOOLS">Frederick County</option>
-      <option onclick="submission()" value = "GARRETT COUNTY SCHOOLS">Garrett County</option>
-      <option onclick="submission()" value = "HARFORD CO SCH">Harford County</option>
-      <option onclick="submission()" value = "HOWARD COUNTY SCHOOLS">Howard County</option>
-      <option onclick="submission()" value = "KENT COUNTY SCHOOLS">Kent County</option>
-      <option onclick="submission()" value = "MONTGOMERY COUNTY SCHOOLS">Montgomery County</option>
-      <option onclick="submission()" value = "PRINCE GEORGES CO SCHS">Prince George's County</option>
-      <option onclick="submission()" value = "QUEEN ANNES COUNTY SCHOOLS">Queen Anne's County</option>
-      <option onclick="submission()" value = "SOMERSET CO SCHS">Somerset County</option>
-      <option onclick="submission()" value = "ST MARYS CO SCHS">St. Mary's County</option>
-      <option onclick="submission()" value = "TALBOT CO SCHS">Talbot County</option>
-      <option onclick="submission()" value = "WASHINGTON CO SCHS">Washington County</option>
-      <option onclick="submission()" value = "WICOMICO CO SCHOOLS">Wicomico County</option>
-      <option onclick="submission()" value = "WORCESTER CO BOARD OF EDUCATION">Worcester County</option>
-    </select>
-</p>
-
-
-<div id="map"></div>
-<div id="menu">
-    <span class="h3">Metric</span>
-    <hr>
-    <form id="form" action="index.html" method="post">
-        <section>
-            <label>
-                <input type="radio" name="metric" value="median_list_price_county">
-                <span class="radio"></span>
-                <span class="label">Median List Price by County</span>
-            </label>
-            <label>
-                <input type="radio" name="metric" value="median_list_price_district">
-                <span class="radio"></span>
-                <span class="label">Median List Price by District</span>
-            </label>
-            <label>
-                <input type="radio" name="metric" value="days_on_market_county" checked>
-                <span class="radio"></span>
-                <span class="label">Days on Market by County</span>
-            </label>
-            <label>
-                <input type="radio" name="metric" value="days_on_market_district">
-                <span class="radio"></span>
-                <span class="label">Days on Market by District</span>
-            </label>
-            <label>
-                <input type="radio" name="metric" value="avg_school_rating">
-                <span class="radio"></span>
-                <span class="label">Average School Rating</span>
-            </label>
-
-        </section>
-
-    </form>
-    <div style="margin-top: 10px;"></div>
-
-    <span class="h3">legend</span>
-    <hr>
-    <div id="legend"></div>
+    <div id="dropdown-cont">
+        <select county="default" id="dropdown">
+            <option value="se">Select county</option>
+            <option value="ALLEGANY COUNTY PUBLIC SCHOOLS">Allegany County</option>
+            <option value="ANNE ARUNDEL CO SCHS">Anne Arundel County</option>
+            <option value="BALTIMORE COUNTY SCHOOLS">Baltimore County</option>
+            <option value="BALTIMORE CITY SCHOOLS">Baltimore City</option>
+            <option value="CALVERT CO SCHS">Calvert County</option>
+            <option value="CAROLINE CO SCHS">Caroline County</option>
+            <option value="CARROLL CO SCHS">Carroll County</option>
+            <option value="CECIL COUNTY PUBLIC SCHOOLS">Cecil County</option>
+            <option value="CHARLES CO SCHS">Charles County</option>
+            <option value="DORCHESTER CO SCHS">Dorchester County</option>
+            <option value="FREDERICK CO SCHOOLS">Frederick County</option>
+            <option value="GARRETT COUNTY SCHOOLS">Garrett County</option>
+            <option value="HARFORD CO SCH">Harford County</option>
+            <option value="HOWARD COUNTY SCHOOLS">Howard County</option>
+            <option value="KENT COUNTY SCHOOLS">Kent County</option>
+            <option value="MONTGOMERY COUNTY SCHOOLS">Montgomery County</option>
+            <option value="PRINCE GEORGES CO SCHS">Prince George's County</option>
+            <option value="QUEEN ANNES COUNTY SCHOOLS">Queen Anne's County</option>
+            <option value="SOMERSET CO SCHS">Somerset County</option>
+            <option value="ST MARYS CO SCHS">St. Mary's County</option>
+            <option value="TALBOT CO SCHS">Talbot County</option>
+            <option value="WASHINGTON CO SCHS">Washington County</option>
+            <option value="WICOMICO CO SCHOOLS">Wicomico County</option>
+            <option value="WORCESTER CO BOARD OF EDUCATION">Worcester County</option>
+        </select>
+    </div>
 
 
-<svg id="vis" width="600" height="600"></svg>
+    <div id="map"></div>
+    <div id="menu">
+        <span class="h3">Metric</span>
+        <hr>
+        <form id="form" action="index.html" method="post">
+            <section>
+                <label>
+                    <input type="radio" name="metric" value="median_list_price_county">
+                    <span class="radio"></span>
+                    <span class="label">Median List Price by County</span>
+                </label>
+                <label>
+                    <input type="radio" name="metric" value="median_list_price_district">
+                    <span class="radio"></span>
+                    <span class="label">Median List Price by District</span>
+                </label>
+                <label>
+                    <input type="radio" name="metric" value="days_on_market_county" checked>
+                    <span class="radio"></span>
+                    <span class="label">Days on Market by County</span>
+                </label>
+                <label>
+                    <input type="radio" name="metric" value="days_on_market_district">
+                    <span class="radio"></span>
+                    <span class="label">Days on Market by District</span>
+                </label>
+                <label>
+                    <input type="radio" name="metric" value="avg_school_rating">
+                    <span class="radio"></span>
+                    <span class="label">Average School Rating</span>
+                </label>
 
-<script src="./static/js/map.js"></script>
+            </section>
+
+        </form>
+        <div style="margin-top: 10px;"></div>
+
+        <span class="h3">legend</span>
+        <hr>
+        <div id="legend"></div>
+
+    </div>
+    
+    <p id="time-label" year="2017">Select Year</p>
+    <div year="2005" id="time-div" class="row align-items-center">
+        <div class="col-sm-2"><p id="value-time"></p></div>
+        <div class="col-sm"><div id="slider-time"></div></div>
+    </div>
+
+    <svg id="revenue-breakdown" width="1200" height="600"></svg>
+
+    <svg id="funding-overview" width="1200" height="800"></svg>
+
+
+
+    <script src="./static/js/map.js"></script>
+    <script src="./static/js/fundingOverview.js"></script>
+    <script src="./static/js/revenue_breakdown.js"></script>
+    <script src="./static/js/slider.js"></script>
 </body>
 
 </html>
