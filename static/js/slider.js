@@ -103,20 +103,25 @@ function updateFundingOverviewGraph(allData) {
       if (d.NAME == county) return "red";
       else return "#69b3a2";
     })
-    .on("mouseenter", function (actual, i) {
-      d3.selectAll(".value").attr("opacity", 0);
+    .on('mouseenter', function(actual, i) {
+        d3.selectAll('.value')
+            .attr('opacity', 0)
 
-      const countyY = y(actual.TOTALREV);
-      console.log("selected", actual, countyY);
+        const countyY = y(actual.TOTALREV)
+        console.log("selected", actual, countyY);
 
-      svgChart
-        .append("line")
-        .attr("class", "limit")
-        .attr("x1", 0)
-        .attr("y1", countyY)
-        .attr("x2", width)
-        .attr("y2", countyY);
-    });
+        svgChart.append('line')
+            .attr('id', 'line-limit')
+            .attr('x1', 0)
+            .attr('y1', countyY)
+            .attr('x2', width)
+            .attr('y2', countyY);
+
+    })
+.on('mouseleave', function() {
+    svgChart.select("#line-limit").remove()
+
+})
 }
 
 function getYearData(allData, year) {
