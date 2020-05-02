@@ -112,7 +112,7 @@ $(document).ready(function() {
 
                     })
                 .on('mouseleave', function() {
-                    svgChart.selectAll("line-limit").remove()
+                    svgChart.select("#line-limit").remove()
                     
                 })
 
