@@ -23,7 +23,7 @@ var margins = {
     lft: 80,
     rt: 30
 };
-var width = 1200;
+var width = 400;
 var height = 600;
 
 function submission() {

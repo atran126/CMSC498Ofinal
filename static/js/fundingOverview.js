@@ -1,14 +1,6 @@
 // set the dimensions and margins of the graph
-var margin = {
-        top: 30,
-        right: 30,
-        bottom: 150,
-        left: 150
-    },
-    width = 800 - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
 var county = $("#dropdown").val();
-
+console.log(width);
 $(document).ready(function() {
     d3.csv("http://localhost:8080/data/countyfunding.csv")
         .then(data => {
@@ -21,8 +13,18 @@ $(document).ready(function() {
             })
 
             console.log("funding overview");
+            console.log(width);
 
             function createChart(data) {
+                var margin = {
+                    top: 30,
+                    right: 30,
+                    bottom: 150,
+                    left: 150
+                },
+                width = 1200 - margin.left - margin.right,
+                height = 800 - margin.top - margin.bottom;
+                
                 $("#funding-overview").empty();
 
                 // var county = document.getElementById("county").value;
@@ -45,6 +47,8 @@ $(document).ready(function() {
                     .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
+                console.log(width)
+                console.log(height + margin.top + margin.bottom)
                 // X axis
                 var x = d3.scaleBand()
                     .range([0, width])
