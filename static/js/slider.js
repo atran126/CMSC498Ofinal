@@ -10,6 +10,14 @@ function updateFundingOverviewGraph(allData) {
   var year = document.getElementById("time-div").getAttribute("year");
   var county = document.getElementById("dropdown").getAttribute("county");
   var chart = document.getElementById("funding-overview");
+  var margin = {
+      top: 30,
+      right: 30,
+      bottom: 150,
+      left: 150
+  },
+  width = 1200 - margin.left - margin.right,
+  height = 800 - margin.top - margin.bottom;
 
   // update the graph
   console.log("slider > funding overview update");
