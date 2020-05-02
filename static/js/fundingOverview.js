@@ -33,7 +33,7 @@ $(document).ready(function() {
                     return a.TOTALREV - b.TOTALREV;
                 });
 
-                // this logs each county name and total revenue 
+                // this logs each county name and total revenue
                 // data.forEach((d) => console.log(d.NAME, d.TOTALREV));
 
                 // append the svg object to the body of the page
@@ -52,7 +52,7 @@ $(document).ready(function() {
                         return d.NAME;
                     }))
                     .padding(0.2);
-                
+
                 svgChart.append("g")
                     .attr("transform", "translate(0," + height + ")")
                     .call(d3.axisBottom(x))

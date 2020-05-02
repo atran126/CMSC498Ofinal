@@ -207,18 +207,41 @@ function isolateData(countyData) {
   var federal = {};
   var state = {};
   var local = {};
-
   total.value = countyData.TOTALREV;
   total.name = "Total";
 
-  state.value = countyData.TSTREV;
-  state.name = "State";
-
   federal.value = countyData.TFEDREV;
   federal.name = "Federal";
+  // Adding items for tooltip
+  federal.display = "Total federal funding: $" + countyData.TFEDREV;
+  federal.display += "\nCompensatory(Title I): $" + countyData.C14;
+  federal.display += "\n Children with disabilites: $" + countyData.C15;
+  federal.display += "\n Child Nutrition Act: $" + countyData.C25;
+  federal.display += "\n All other federal aid: $" + countyData.B13;
+
+
+  state.value = countyData.TSTREV;
+  state.name = "State";
+  // Adding items for tooltip
+  state.display = "Total state funding: $" + countyData.TSTREV;
+  state.display += "\nGeneral formula assistance: $" + countyData.C01;
+  state.display += "\nSpecial education programs: $" + countyData.C05;
+  state.display += "\nCompensatory and basic skills attainment programs : $" + countyData.C06;
+  state.display += "\nBilingual Education programs : $" + countyData.C07;
+  state.display += "\nSchool Lunch programs : $" + countyData.C10;
+  state.display += "\nTransportation programs: $" + countyData.C12;
+  state.display += "\nAll other state revenue: $" + countyData.C13;
 
   local.value = countyData.TLOCREV;
   local.name = "Local";
+  // Adding items for tooltip
+  local.display = "Total local funding: $" + countyData.TLOCREV;
+  local.display += "\nParent government contributions : $" + countyData.T02;
+  local.display += "\nTransportation Fees: $" + countyData.A08;
+  local.display += "\nSchool lunch revenues: $" + countyData.A09;
+  local.display += "\nOther sales and service revenues: $" + countyData.A20;
+  local.display += "\nInterest Earnings: $" + countyData.U22;
+  local.display += "\nOther local revenues: $" + countyData.U97;
 
   obj.push(total);
   obj.push(federal);
