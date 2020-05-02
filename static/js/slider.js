@@ -16,7 +16,7 @@ function updateFundingOverviewGraph(allData) {
       bottom: 150,
       left: 150
   },
-  width = 1200 - margin.left - margin.right,
+  width = 800 - margin.left - margin.right,
   height = 800 - margin.top - margin.bottom;
 
   // update the graph

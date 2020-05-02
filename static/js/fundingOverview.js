@@ -22,9 +22,9 @@ $(document).ready(function() {
                     bottom: 150,
                     left: 150
                 },
-                width = 1200 - margin.left - margin.right,
+                width = 800 - margin.left - margin.right,
                 height = 800 - margin.top - margin.bottom;
-                
+
                 $("#funding-overview").empty();
 
                 // var county = document.getElementById("county").value;
@@ -117,7 +117,7 @@ $(document).ready(function() {
                     })
                 .on('mouseleave', function() {
                     svgChart.select("#line-limit").remove()
-                    
+
                 })
 
 
