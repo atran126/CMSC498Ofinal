@@ -5,8 +5,14 @@
     <title>School Funding & Housing Prices</title>
     <script src="./static/js/d3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="./static/css/group.css">
     <script src="https://unpkg.com/d3-simple-slider"></script>
+
+    <link rel="stylesheet" type="text/css" href="./static/css/group.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/fundingOverview.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/revenue.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/css/bootstrap.min.css">
+
 
 </head>
 
@@ -41,59 +47,82 @@
         </select>
     </div>
 
+    <div class="container">
 
-    <div id="map"></div>
-    <div id="menu">
-        <span class="h3">Metric</span>
-        <hr>
-        <form id="form" action="index.html" method="post">
-            <section>
-                <label>
-                    <input type="radio" name="metric" value="median_list_price_county">
-                    <span class="radio"></span>
-                    <span class="label">Median List Price by County</span>
-                </label>
-                <label>
-                    <input type="radio" name="metric" value="median_list_price_district">
-                    <span class="radio"></span>
-                    <span class="label">Median List Price by District</span>
-                </label>
-                <label>
-                    <input type="radio" name="metric" value="days_on_market_county" checked>
-                    <span class="radio"></span>
-                    <span class="label">Days on Market by County</span>
-                </label>
-                <label>
-                    <input type="radio" name="metric" value="days_on_market_district">
-                    <span class="radio"></span>
-                    <span class="label">Days on Market by District</span>
-                </label>
-                <label>
-                    <input type="radio" name="metric" value="avg_school_rating">
-                    <span class="radio"></span>
-                    <span class="label">Average School Rating</span>
-                </label>
 
-            </section>
+        <p id="time-label" year="2017">Select Year</p>
+        <div year="2005" id="time-div" class="row align-items-center">
+            <div class="col-sm-2"><p id="value-time"></p></div>
+            <div class="col-sm"><div id="slider-time"></div></div>
+        </div>
 
-        </form>
-        <div style="margin-top: 10px;"></div>
 
-        <span class="h3">legend</span>
-        <hr>
-        <div id="legend"></div>
+        <div class="row">
+            <div id="map"></div>
+            <div id="menu">
+                <span class="h3">Metric</span>
+                <hr>
+                <form id="form" action="index.html" method="post">
+                    <section>
+                        <label>
+                            <input type="radio" name="metric" value="median_list_price_county">
+                            <span class="radio"></span>
+                            <span class="label">Median List Price by County</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="metric" value="median_list_price_district">
+                            <span class="radio"></span>
+                            <span class="label">Median List Price by District</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="metric" value="days_on_market_county" checked>
+                            <span class="radio"></span>
+                            <span class="label">Days on Market by County</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="metric" value="days_on_market_district">
+                            <span class="radio"></span>
+                            <span class="label">Days on Market by District</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="metric" value="avg_school_rating">
+                            <span class="radio"></span>
+                            <span class="label">Average School Rating</span>
+                        </label>
 
-    </div>
-    
-    <p id="time-label" year="2017">Select Year</p>
-    <div year="2005" id="time-div" class="row align-items-center">
-        <div class="col-sm-2"><p id="value-time"></p></div>
-        <div class="col-sm"><div id="slider-time"></div></div>
-    </div>
+                    </section>
 
-    <svg id="revenue-breakdown" width="1200" height="600"></svg>
+                </form>
+                <div style="margin-top: 10px;"></div>
 
-    <svg id="funding-overview" width="1200" height="800"></svg>
+                <span class="h3">legend</span>
+                <hr>
+                <div id="legend"></div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class ="col-sm-4">
+                <div>
+                    <svg id="revenue-breakdown" width="400" height="800"></svg>
+                </div>
+            </div>
+
+            <div class ="col-sm-8">
+                <div>
+                    <svg id="funding-overview" width="800" height="800"></svg>
+                </div>
+            </div>
+
+        </div>
+   </div>
+
+
+
+
+
+
+
 
 
 

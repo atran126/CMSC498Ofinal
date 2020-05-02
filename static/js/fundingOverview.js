@@ -1,14 +1,6 @@
 // set the dimensions and margins of the graph
-var margin = {
-        top: 30,
-        right: 30,
-        bottom: 150,
-        left: 150
-    },
-    width = 1500 - margin.left - margin.right,
-    height = 800 - margin.top - margin.bottom;
 var county = $("#dropdown").val();
-
+console.log(width);
 $(document).ready(function() {
     d3.csv("http://localhost:8080/data/countyfunding.csv")
         .then(data => {
@@ -21,8 +13,18 @@ $(document).ready(function() {
             })
 
             console.log("funding overview");
+            console.log(width);
 
             function createChart(data) {
+                var margin = {
+                    top: 30,
+                    right: 30,
+                    bottom: 150,
+                    left: 150
+                },
+                width = 800 - margin.left - margin.right,
+                height = 800 - margin.top - margin.bottom;
+
                 $("#funding-overview").empty();
 
                 // var county = document.getElementById("county").value;
@@ -33,7 +35,7 @@ $(document).ready(function() {
                     return a.TOTALREV - b.TOTALREV;
                 });
 
-                // this logs each county name and total revenue 
+                // this logs each county name and total revenue
                 // data.forEach((d) => console.log(d.NAME, d.TOTALREV));
 
                 // append the svg object to the body of the page
@@ -45,6 +47,8 @@ $(document).ready(function() {
                     .attr("transform",
                         "translate(" + margin.left + "," + margin.top + ")");
 
+                console.log(width)
+                console.log(height + margin.top + margin.bottom)
                 // X axis
                 var x = d3.scaleBand()
                     .range([0, width])
@@ -52,7 +56,7 @@ $(document).ready(function() {
                         return d.NAME;
                     }))
                     .padding(0.2);
-                
+
                 svgChart.append("g")
                     .attr("transform", "translate(0," + height + ")")
                     .call(d3.axisBottom(x))
@@ -104,44 +108,17 @@ $(document).ready(function() {
                         console.log("selected", actual, countyY);
 
                         svgChart.append('line')
-                            .attr('class', 'limit')
+                            .attr('id', 'line-limit')
                             .attr('x1', 0)
                             .attr('y1', countyY)
                             .attr('x2', width)
                             .attr('y2', countyY);
 
-
-                        // svgChart.append('text')
-                        // .data(data)
-                        // .attr('class', "divergence")
-                        // .attr('x', d => x(d.NAME) + x.bandwidth() / 2)
-                        // .attr('y', d => y(d.TOTALREV) + 30)
-                        // .attr('fill', 'white')
-                        // .attr('text-anchor', 'middle')
-                        // .text((d, idx) => {
-                        //   const divergence = (d.TOTALREV - actual.TOTALREV).toFixed(1)
-
-                        //   let text = ''
-                        //   if (divergence > 0) text += '+'
-                        //   text += `${divergence}%`
-
-                        //   return idx !== i ? text : '';
-                        // });
                     })
-                // .on('mouseleave', function() {
-                //   d3.selectAll('.value')
-                //     .attr('opacity', 1)
+                .on('mouseleave', function() {
+                    svgChart.select("#line-limit").remove()
 
-                //   d3.select(this)
-                //     .transition()
-                //     .duration(300)
-                //     .attr('opacity', 1)
-                //     .attr('x', (a) => x(a.language))
-                //     .attr('width', x.bandwidth())
-
-                //     svgChart.selectAll("line-limit").remove()
-                //     svgChart.selectAll("divergence").remove()
-                // })
+                })
 
 
             };

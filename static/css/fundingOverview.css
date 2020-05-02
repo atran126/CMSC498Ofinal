@@ -1,8 +1,4 @@
-.line {
-  stroke: red;
-}
-
-.line .line-limit {
+#line-limit {
   stroke: red;
   stroke-width: 3;
   stroke-dasharray: 3 6;
