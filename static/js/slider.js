@@ -5,7 +5,7 @@ d3.json("http://localhost:8080/../../data/yeardata.json")
   .catch((e) => console.log(e));
 
 function updateFundingOverviewGraph(allData) {
-  console.log("slider > funding overview update");
+
 
   var year = document.getElementById("time-div").getAttribute("year");
   var county = document.getElementById("dropdown").getAttribute("county");
@@ -19,8 +19,7 @@ function updateFundingOverviewGraph(allData) {
   width = 800 - margin.left - margin.right,
   height = 800 - margin.top - margin.bottom;
 
-  // update the graph
-  console.log("slider > funding overview update");
+
 
   // approach: find the current year
   var yearData = getYearData(allData, year);
@@ -108,7 +107,7 @@ function updateFundingOverviewGraph(allData) {
             .attr('opacity', 0)
 
         const countyY = y(actual.TOTALREV)
-        console.log("selected", actual, countyY);
+
 
         svgChart.append('line')
             .attr('id', 'line-limit')
@@ -141,67 +140,11 @@ function updateRevenueGraph(allData) {
 
   // isolate the county data
   var countyData = getCountyData(allData, year, county);
-
   // within county data, get data to graph
   var graphData = isolateData(countyData);
+  makeChart(graphData, chart);
 
-  $("#revenue-breakdown").empty();
-  var revenue = ["Total", "Federal", "State", "Local"];
-  var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
 
-  // xBand
-  var xBand = d3
-    .scaleBand()
-    .domain(revenue)
-    .range([margins.lft, width - margins.rt])
-    .paddingInner(0.2);
-
-  // Height scale function
-  var hScale = d3
-    .scaleLinear()
-    .domain([1, graphData[0].value])
-    //.domain([1, 3000000])
-    .range([height - margins.btm - margins.tp, 0]);
-
-  // Creates bar chart
-  d3.select(chart)
-    .selectAll("rect")
-    .data(graphData)
-    .enter()
-    .append("rect")
-    .attr("x", (d) => xBand(d.name) + "px")
-    .attr("y", (d) => margins.tp + hScale(d.value) + "px")
-    .attr("width", xBand.bandwidth())
-    .attr("height", (d) => height - margins.tp - margins.btm - hScale(d.value))
-    .attr("fill", "#b72506")
-    .append("svg:title")
-
-    .text(function (d) {
-      return d.display;
-    });
-
-  // Use http://bl.ocks.org/mstanaland/6100713 for stacked bar chart
-
-  // X-axis
-  d3.select(chart)
-    .append("g")
-    .attr("transform", `translate(0,${height - margins.btm})`)
-    .call(d3.axisBottom(xBand));
-
-  // Y-axis
-  d3.select(chart)
-    .append("g")
-    .attr("transform", `translate(${margins.lft}, ${margins.tp})`)
-    .call(d3.axisLeft(hScale));
-
-  // Y-axis label
-  d3.select(chart)
-    .append("text")
-    .attr("x", 0 - height / 2)
-    .attr("y", 15)
-    .attr("transform", "rotate(-90)")
-    .style("text-anchor", "middle")
-    .text("Revenue ($)");
 }
 
 function getCountyData(allData, year, county) {
@@ -222,39 +165,76 @@ function isolateData(countyData) {
   var local = {};
   total.value = countyData.TOTALREV;
   total.name = "Total";
+  total.cat1 = 0;
+  total.cat2 = 0;
+  total.cat3 = 0;
+  total.cat4 = 0;
+  total.cat5 = 0;
+  total.cat6 = 0;
+  total.cat7 = countyData.TOTALREV;
 
   federal.value = countyData.TFEDREV;
   federal.name = "Federal";
+  // Adding categories for stacked bars
+  federal.cat1 = countyData.C14;
+  federal.cat2 = countyData.C15;
+  federal.cat3 =  countyData.C16;
+  federal.cat4 = countyData.C19;
+  federal.cat5 = countyData.B11;
+  federal.cat6 = countyData.C25;
+  federal.cat7 = countyData.TFEDREV - (federal.cat1 + federal.cat2 + federal.cat3 + federal.cat4 + federal.cat5 + federal.cat6);
+
+
   // Adding items for tooltip
-  federal.display = "Total federal funding: $" + countyData.TFEDREV;
-  federal.display += "\nCompensatory(Title I): $" + countyData.C14;
-  federal.display += "\n Children with disabilites: $" + countyData.C15;
-  federal.display += "\n Child Nutrition Act: $" + countyData.C25;
-  federal.display += "\n All other federal aid: $" + countyData.B13;
+  federal.cat1display = "Compensatory(Title I): $" + countyData.C14;
+  federal.cat2display = "Children with disabilites: $" + countyData.C15;
+  federal.cat3display = "Math, science, and teacher quality: $" + federal.cat3;
+  federal.cat4display = "Vocational and technical education: $" + federal.cat4;
+  federal.cat5display = "Bilingual education: $" + federal.cat5;
+  federal.cat6display = "Child Nutrition Act: $" + countyData.C25;
+  federal.cat7display = "All other federal aid: $" + federal.cat7;
 
 
   state.value = countyData.TSTREV;
   state.name = "State";
+
+  state.cat1 = countyData.C01;
+  state.cat2 = countyData.C05;
+  state.cat3 = countyData.C06;
+  state.cat4 = countyData.C07;
+  state.cat5 = countyData.C10;
+  state.cat6 = countyData.C12;
+  state.cat7 = countyData.TSTREV - (state.cat1 + state.cat2 + state.cat3 + state.cat4 + state.cat5 + state.cat6);
+
   // Adding items for tooltip
-  state.display = "Total state funding: $" + countyData.TSTREV;
-  state.display += "\nGeneral formula assistance: $" + countyData.C01;
-  state.display += "\nSpecial education programs: $" + countyData.C05;
-  state.display += "\nCompensatory and basic skills attainment programs : $" + countyData.C06;
-  state.display += "\nBilingual Education programs : $" + countyData.C07;
-  state.display += "\nSchool Lunch programs : $" + countyData.C10;
-  state.display += "\nTransportation programs: $" + countyData.C12;
-  state.display += "\nAll other state revenue: $" + countyData.C13;
+  state.cat1display = "General formula assistance: $" + countyData.C01;
+  state.cat2display = "Special education programs: $" + countyData.C05;
+  state.cat3display = "Compensatory and basic skills attainment programs : $" + countyData.C06;
+  state.cat4display = "Bilingual Education programs : $" + countyData.C07;
+  state.cat5display = "School Lunch programs : $" + countyData.C10;
+  state.cat6display = "Transportation programs: $" + countyData.C12;
+  state.cat7display = "All other state revenue: $" + state.cat7;
 
   local.value = countyData.TLOCREV;
   local.name = "Local";
+
+
+  local.cat1 = countyData.T02;
+  local.cat2 = countyData.A08;
+  local.cat3 = countyData.A09;
+  local.cat4 = countyData.A20;
+  local.cat5 = countyData.U22;
+  local.cat6 = countyData.A07;
+  local.cat7 = countyData.TLOCREV - (local.cat1 + local.cat2 + local.cat3 + local.cat4 + local.cat5 + local.cat6);
+
   // Adding items for tooltip
-  local.display = "Total local funding: $" + countyData.TLOCREV;
-  local.display += "\nParent government contributions : $" + countyData.T02;
-  local.display += "\nTransportation Fees: $" + countyData.A08;
-  local.display += "\nSchool lunch revenues: $" + countyData.A09;
-  local.display += "\nOther sales and service revenues: $" + countyData.A20;
-  local.display += "\nInterest Earnings: $" + countyData.U22;
-  local.display += "\nOther local revenues: $" + countyData.U97;
+  local.cat1display = "Parent government contributions : $" + countyData.T02;
+  local.cat2display = "Transportation Fees: $" + countyData.A08;
+  local.cat3display = "School lunch revenues: $" + countyData.A09;
+  local.cat4display = "Other sales and service revenues: $" + countyData.A20;
+  local.cat5display = "Interest Earnings: $" + countyData.U22;
+  local.cat6display = "Tuition fees: $" + local.cat6;
+  local.cat7display = "Other local revenues: $" + local.cat7;
 
   obj.push(total);
   obj.push(federal);
