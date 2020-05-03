@@ -4,7 +4,11 @@ body {
 }
 
 #map svg {
+<<<<<<< HEAD
     transform: rotate(11.3deg)translate(-350px,-75px);
+=======
+    transform: rotate(11.3deg);
+>>>>>>> 86942168170a78a4c20adf5fd780eb6711760476
 
 }
 

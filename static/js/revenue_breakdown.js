@@ -19,139 +19,209 @@ $(document).ready(function() {
 
 var margins = {
     tp: 20,
-    btm: 180,
+    btm: 50,
     lft: 80,
     rt: 30
 };
 var width = 400;
 var height = 500;
 
-function submission() {
-    console.log("Hello");
-    // getData()
-    //     .then(jsonTuples => { // renders the data table
-    //         console.log(jsonTuples[0]);
-    //         createChart(jsonTuples, county, chart);
-    //     })
-    //     .catch(e => console.log(e));
-}
 
 function createChart(jsonTuples, county, chart) {
-    // console.log(chart);
-    // chart.innerHTML = "";
+
     $("#revenue-breakdown").empty();
     data = filterData(county, jsonTuples);
-    var revenue = ["Total", "Federal", "State", "Local"];
-    var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
+    makeChart(data, chart);
+  }
 
-    // xBand
-    var xBand = d3.scaleBand()
-        .domain(revenue)
-        .range([margins.lft, width - margins.rt])
-        .paddingInner(0.2);
-
-    // Height scale function
-    var hScale = d3.scaleLinear()
-        .domain([1, data[0].value])
-        //.domain([1, 3000000])
-        .range([height - margins.btm - margins.tp, 0]);
-
-    // Creates bar chart
-
-    d3.select(chart)
-        .selectAll("rect")
-        .data(data)
-        .enter()
-        .append("rect")
-        .attr("x", d => xBand(d.name) + "px")
-        .attr("y", d => margins.tp + hScale(d.value) + "px")
-        .attr("width", xBand.bandwidth())
-        .attr("height", d => (height - margins.tp - margins.btm - hScale(d.value)))
-        .attr("fill", "#b72506")
-        .append("svg:title")
-
-        .text(function(d) {
-            return d.display;
-        });
-
-    // Use http://bl.ocks.org/mstanaland/6100713 for stacked bar chart
+function makeChart(graphData, chart) {
 
 
-    // X-axis
-    d3.select(chart).append("g")
-        .attr("transform", `translate(0,${height - margins.btm})`)
-        .call(d3.axisBottom(xBand))
 
-    // Y-axis
-    d3.select(chart).append("g")
-        .attr("transform", `translate(${margins.lft}, ${margins.tp})`)
-        .call(d3.axisLeft(hScale));
+  $("#revenue-breakdown").empty();
+  var revenue = ["Total", "Federal", "State", "Local"];
+  var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
+  var keys = ["cat1", "cat2", "cat3", "cat4", "cat5", "cat6", "cat7"];
 
-    // Y-axis label
-    d3.select(chart).append("text")
-        .attr("x", 0 - height / 2)
-        .attr("y", 15)
-        .attr("transform", "rotate(-90)")
-        .style("text-anchor", "middle")
-        .text("Revenue ($)");
+  // xBand
+  var xBand = d3
+  var xBand = d3.scaleBand()
+      .domain(revenue)
+      .range([margins.lft, width - margins.rt])
+      .paddingInner(0.1);
+
+  // Height scale function
+  var hScale = d3.scaleLinear()
+      .domain([1, graphData[0].value])
+      .range([height - margins.btm - margins.tp, 0]);
+
+  // Color scale
+  var color = d3.scaleOrdinal()
+  .domain(revenue)
+  .range(d3.schemeCategory10);
 
 
+  // Use http://bl.ocks.org/mstanaland/6100713 for stacked bar chart
+var stack = d3.stack()
+  .keys(keys);
+var stacked_data = stack(graphData);
+
+d3.select(chart)
+      .append("g")
+      .selectAll("g")
+      .data(stacked_data)
+      .enter().append("g")
+      .attr("fill", function(d) { return color(d.key); })
+      .selectAll("rect")
+
+      // loop subgroup per subgroup to add stacked bars
+      .data(function(d) { return d; })
+      .enter().append("rect")
+      .attr("x", (d) => xBand(d.data.name) + "px")
+      .attr("y", (d) => margins.tp + hScale(d[1]) + "px")
+      .attr("height", function(d) { return hScale(d[0]) - hScale(d[1]); })
+      .attr("width", xBand.bandwidth())
+
+      // More information on hover
+      .on("mouseover", function() { tooltip.style("display", null); })
+      .on("mouseout", function() { tooltip.style("display", "none"); })
+      .on("mousemove", function(d) {
+        console.log(d);
+        var xPosition = d3.mouse(this)[0] - 5;
+        var yPosition = d3.mouse(this)[1] - 5;
+        tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+        tooltip.select("text").text("AHRARWHAHE");
+      });
+
+
+  // X-axis
+  d3.select(chart)
+    .append("g")
+    .attr("transform", `translate(0,${height - margins.btm})`)
+    .call(d3.axisBottom(xBand));
+
+  // Y-axis
+  d3.select(chart)
+    .append("g")
+    .attr("transform", `translate(${margins.lft}, ${margins.tp})`)
+    .call(d3.axisLeft(hScale));
+
+  // Y-axis label
+  d3.select(chart)
+    .append("text")
+    .attr("x", 0 - height / 2)
+    .attr("y", 15)
+    .attr("transform", "rotate(-90)")
+    .style("text-anchor", "middle")
+    .text("Revenue ($)");
+
+    // Prep the tooltip bits, initial display is hidden
+  var tooltip = svg.append("g")
+    .attr("class", "tooltip")
+    .style("display", "none");
+
+  tooltip.append("rect")
+    .attr("width", 60)
+    .attr("height", 20)
+    .attr("fill", "white")
+    .style("opacity", 0.5);
+
+  tooltip.append("text")
+    .attr("x", 30)
+    .attr("dy", "1.2em")
+    .style("text-anchor", "middle")
+    .attr("font-size", "12px")
+    .attr("font-weight", "bold");
 }
 
 // Filters the json data so that it only returns funding for a specific county
 function filterData(county, jsonTuples) {
     var obj = [];
-    jsonTuples.forEach((j) => {
-        if (j.NAME === county) {
+    jsonTuples.forEach((countyData) => {
+        if (countyData.NAME === county) {
 
-            // Create objects for each type of funding
-            var total = {};
-            var federal = {};
-            var state = {};
-            var local = {};
+          var total = {};
+          var federal = {};
+          var state = {};
+          var local = {};
+          total.value = countyData.TOTALREV;
+          total.name = "Total";
+          total.cat1 = 0;
+          total.cat2 = 0;
+          total.cat3 = 0;
+          total.cat4 = 0;
+          total.cat5 = 0;
+          total.cat6 = 0;
+          total.cat7 = countyData.TOTALREV;
 
-            total.value = j.TOTALREV;
-            total.name = "Total";
+          federal.value = countyData.TFEDREV;
+          federal.name = "Federal";
+          // Adding categories for stacked bars
+          federal.cat1 = countyData.C14;
+          federal.cat2 = countyData.C15;
+          federal.cat3 =  countyData.C16;
+          federal.cat4 = countyData.C19;
+          federal.cat5 = countyData.B11;
+          federal.cat6 = countyData.C25;
+          federal.cat7 = countyData.TFEDREV - (federal.cat1 + federal.cat2 + federal.cat3 + federal.cat4 + federal.cat5 + federal.cat6);
 
-            federal.value = j.TFEDREV;
-            federal.name = "Federal";
-            // Adding items for tooltip
-            federal.display = "Total federal funding: $" + j.TFEDREV;
-            federal.display += "\nCompensatory(Title I): $" + j.C14;
-            federal.display += "\n Children with disabilites: $" + j.C15;
-            federal.display += "\n Child Nutrition Act: $" + j.C25;
-            federal.display += "\n All other federal aid: $" + j.B13;
+
+          // Adding items for tooltip
+          federal.cat1display = "Compensatory(Title I): $" + countyData.C14;
+          federal.cat2display = "Children with disabilites: $" + countyData.C15;
+          federal.cat3display = "Math, science, and teacher quality: $" + federal.cat3;
+          federal.cat4display = "Vocational and technical education: $" + federal.cat4;
+          federal.cat5display = "Bilingual education: $" + federal.cat5;
+          federal.cat6display = "Child Nutrition Act: $" + countyData.C25;
+          federal.cat7display = "All other federal aid: $" + federal.cat7;
 
 
-            state.value = j.TSTREV;
-            state.name = "State";
-            // Adding items for tooltip
-            state.display = "Total state funding: $" + j.TSTREV;
-            state.display += "\nGeneral formula assistance: $" + j.C01;
-            state.display += "\nSpecial education programs: $" + j.C05;
-            state.display += "\nCompensatory and basic skills attainment programs : $" + j.C06;
-            state.display += "\nBilingual Education programs : $" + j.C07;
-            state.display += "\nSchool Lunch programs : $" + j.C10;
-            state.display += "\nTransportation programs: $" + j.C12;
-            state.display += "\nAll other state revenue: $" + j.C13;
+          state.value = countyData.TSTREV;
+          state.name = "State";
 
-            local.value = j.TLOCREV;
-            local.name = "Local";
-            // Adding items for tooltip
-            local.display = "Total local funding: $" + j.TLOCREV;
-            local.display += "\nParent government contributions : $" + j.T02;
-            local.display += "\nTransportation Fees: $" + j.A08;
-            local.display += "\nSchool lunch revenues: $" + j.A09;
-            local.display += "\nOther sales and service revenues: $" + j.A20;
-            local.display += "\nInterest Earnings: $" + j.U22;
-            local.display += "\nOther local revenues: $" + j.U97;
+          state.cat1 = countyData.C01;
+          state.cat2 = countyData.C05;
+          state.cat3 = countyData.C06;
+          state.cat4 = countyData.C07;
+          state.cat5 = countyData.C10;
+          state.cat6 = countyData.C12;
+          state.cat7 = countyData.TSTREV - (state.cat1 + state.cat2 + state.cat3 + state.cat4 + state.cat5 + state.cat6);
 
-            // Add objects to array
-            obj.push(total);
-            obj.push(federal);
-            obj.push(state);
-            obj.push(local);
-            return obj;
+          // Adding items for tooltip
+          state.cat1display = "General formula assistance: $" + countyData.C01;
+          state.cat2display = "Special education programs: $" + countyData.C05;
+          state.cat3display = "Compensatory and basic skills attainment programs : $" + countyData.C06;
+          state.cat4display = "Bilingual Education programs : $" + countyData.C07;
+          state.cat5display = "School Lunch programs : $" + countyData.C10;
+          state.cat6display = "Transportation programs: $" + countyData.C12;
+          state.cat7display = "All other state revenue: $" + state.cat7;
+
+          local.value = countyData.TLOCREV;
+          local.name = "Local";
+
+
+          local.cat1 = countyData.T02;
+          local.cat2 = countyData.A08;
+          local.cat3 = countyData.A09;
+          local.cat4 = countyData.A20;
+          local.cat5 = countyData.U22;
+          local.cat6 = countyData.A07;
+          local.cat7 = countyData.TLOCREV - (local.cat1 + local.cat2 + local.cat3 + local.cat4 + local.cat5 + local.cat6);
+
+          // Adding items for tooltip
+          local.cat1display = "Parent government contributions : $" + countyData.T02;
+          local.cat2display = "Transportation Fees: $" + countyData.A08;
+          local.cat3display = "School lunch revenues: $" + countyData.A09;
+          local.cat4display = "Other sales and service revenues: $" + countyData.A20;
+          local.cat5display = "Interest Earnings: $" + countyData.U22;
+          local.cat6display = "Tuition fees: $" + local.cat6;
+          local.cat7display = "Other local revenues: $" + local.cat7;
+
+          obj.push(total);
+          obj.push(federal);
+          obj.push(state);
+          obj.push(local);
+          return obj;
         }
     });
     return obj;
