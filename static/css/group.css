@@ -4,7 +4,7 @@ body {
 }
 
 #map svg {
-    transform: rotate(11.3deg) translate(-100px,0);
+    transform: rotate(11.3deg);
 
 }
 

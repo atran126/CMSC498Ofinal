@@ -1,18 +1,19 @@
 var legend;
 var bgColor = "#eee";
-var width = 1200;
-var height = 700;
+var width = 650;
+var height = 450;
 
 // D3 Projection
 var projection = d3.geoAlbersUsa()
-    .translate([-3400, 800])
-    .scale(16000)
+    .translate([-2250, 500])
+    .scale(10000)
 
 // Define path generator
 var path = d3.geoPath()
     .projection(projection)
 
 var categories = {
+    median_price: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
     median_list_price_district: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
     median_list_price_county: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
     days_on_market_county: ["No Data", "0-50", "50-100", ">100"],
@@ -21,6 +22,7 @@ var categories = {
 }
 
 var colors = {
+    median_price: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
     median_list_price_district: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
     median_list_price_county: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
     days_on_market_county: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
@@ -29,6 +31,7 @@ var colors = {
 }
 
 var green = {
+    median_price: getScale("median_price"),
     median_list_price_district: getScale("median_list_price_district"),
     median_list_price_county: getScale("median_list_price_county"),
     days_on_market_county: getScale("days_on_market_county"),
@@ -75,10 +78,10 @@ var formData = getFormData();
 
 // draw the map
 d3.json("http://localhost:8080/data/md-counties.json")
-    .then(map_data => {
+    .then(geo_json => {
         // Bind the data to the SVG and create one path per GeoJSON feature
         var paths = svg.selectAll("path")
-            .data(map_data.features)
+            .data(geo_json.features)
             .enter()
             .append("path")
             .attr("id", d => d.properties["NAME"].replace(/\W+/g, ""))
@@ -86,161 +89,37 @@ d3.json("http://localhost:8080/data/md-counties.json")
             .style("stroke", "#fff")
             .style("stroke-width", "1");
 
-        d3.json("http://localhost:8080/data/house_prices.json")
-            .then(house_prices => {
-                data = house_prices;
+        d3.json("http://localhost:8080/data/house_prices_historical.json")
+            .then(map_data => {
+                $("#dropdown").change(dropdownChange);
                 $("input").click(updateMap);
                 $("input").click(updateLegend);
+                $("#time-div").change(updateMap)
+                // .change(updateLegend);
                 // d3.select("#dropdown").on("change", zoomMap)
-                $("#dropdown").change(function() {
-                    $(".currentCounty").removeClass("currentCounty");
-                    var county = $(this).val();
-                    var i = -1;
 
-
-
-                    switch (county) {
-                        case "ALLEGANY COUNTY PUBLIC SCHOOLS":
-                            county = "#Allegany";
-                            i = 0;
-                            break;
-                        case "ANNE ARUNDEL CO SCHS":
-                            county = "#AnneArundel";
-                            i = 1;
-                            break;
-                        case "CHARLES CO SCHS":
-                            county = "#Charles";
-                            i = 2;
-                            break;
-                        case "DORCHESTER CO SCHS":
-                            county = "#Dorchester";
-                            i = 3;
-                            break;
-                        case "HOWARD COUNTY SCHOOLS":
-                            county = "#Howard";
-                            i = 4;
-                            break;
-                        case "KENT COUNTY SCHOOLS":
-                            county = "#Kent";
-                            i = 5;
-                            break;
-                        case "QUEEN ANNES COUNTY SCHOOLS":
-                            county = "#QueenAnnes";
-                            i = 6;
-                            break;
-                        case "ST MARYS CO SCHS":
-                            county = "#StMarys";
-                            i = 7;
-                            break;
-                        case "TALBOT CO SCHS":
-                            county = "#Talbot";
-                            i = 8;
-                            break;
-                        case "WASHINGTON CO SCHS":
-                            county = "#Washington";
-                            i = 9;
-                            break;
-                        case "BALTIMORE COUNTY SCHOOLS":
-                            county = "#Baltimore";
-                            i = 10;
-                            break;
-                        case "CALVERT CO SCHS":
-                            county = "#Calvert";
-                            i = 11;
-                            break;
-                        case "CAROLINE CO SCHS":
-                            county = "#Caroline";
-                            i = 12;
-                            break;
-                        case "CARROLL CO SCHS":
-                            county = "#Carroll";
-                            i = 13;
-                            break;
-                        case "CECIL COUNTY PUBLIC SCHOOLS":
-                            county = "#Cecil";
-                            i = 14;
-                            break;
-                        case "FREDERICK CO SCHOOLS":
-                            county = "#Frederick";
-                            i = 15;
-                            break;
-                        case "GARRETT COUNTY SCHOOLS":
-                            county = "#Garrett";
-                            i = 16;
-                            break;
-                        case "HARFORD CO SCH":
-                            county = "#Harford";
-                            i = 17;
-                            break;
-                        case "MONTGOMERY COUNTY SCHOOLS":
-                            county = "#Montgomery";
-                            i = 18;
-                            break;
-                        case "PRINCE GEORGES CO SCHS":
-                            county = "#PrinceGeorges";
-                            i = 19;
-                            break;
-                        case "WICOMICO CO SCHOOLS":
-                            county = "#Wicomico";
-                            i = 20;
-                            break;
-                        case "WORCESTER CO BOARD OF EDUCATION":
-                            county = "#Worcester";
-                            i = 21;
-                            break;
-                        case "BALTIMORE CITY SCHOOLS":
-                            county = "#BaltimoreCity";
-                            i = 22;
-                            break;
-                        case "SOMERSET CO SCHS":
-                            county = "#Somerset";
-                            i = 23;
-                            break;
-                        default:
-                            county = "";
-                            i = -1;
-                            break;
-
-                    }
-                    var c = map_data.features[i];
-                    console.log(c);
-                    $(county).addClass("currentCounty");
-                    tooltips();
-
-
-                    // var bounds = path.bounds(c),
-                    //     dx = bounds[1][0] - bounds[0][0],
-                    //     dy = bounds[1][1] - bounds[0][1],
-                    //     x = (bounds[0][0] + bounds[1][0]) / 2,
-                    //     y = (bounds[0][1] + bounds[1][1]) / 2,
-                    //     scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
-                    //     translate = [width / 2 - scale * x, height / 2 - scale * y];
-                    //
-                    // svg.transition()
-                    //     .duration(750)
-                    //     // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
-                    //     .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)); // updated for d3 v4
-                    //
-                    //
-                    // console.log("CHANGED: " + county);
-                    // console.log(bounds);
-
-                });
+                tooltips();
 
                 // map realtor data to make it easier to access
-                data = d3.nest()
+                map_data = d3.nest()
+                    .key(item => item.year)
                     .key(item => item.county)
-                    .object(data);
+                    .object(map_data);
+
+                function getYear() {
+                    return $("#time-label").attr("year");
+                }
 
                 // fill in colors
                 paths.style("fill", d => {
+                    var year = getYear();
                     var county = d.properties["NAME"];
 
                     // no data, should we get find some?
-                    if (!data[county]) {
+                    if (!map_data[year][county]) {
                         return "#eee";
                     } else {
-                        var n = data[county][0][formData];
+                        var n = map_data[year][county][0][formData];
                         n = getCategory(n);
                         return colors[formData][n]
                     }
@@ -254,17 +133,18 @@ d3.json("http://localhost:8080/data/md-counties.json")
                 function tooltips() {
                     paths.on("mouseover", function(d) {
                             $(".tooltip").empty();
+                            var year = getYear();
                             var county = d.properties["NAME"];
 
-                            if (data[county] != undefined) {
-                                var num = data[county][0][formData];
+                            if (map_data[year][county] != undefined) {
+                                var num = map_data[year][county][0][formData];
                                 div.transition()
                                     .duration(200)
                                     .style("opacity", .9);
 
                                 $(".tooltip").append(county)
                                     .append("<hr>")
-                                    .append(data[county][0][formData])
+                                    .append(num)
                                     .css("left", (d3.event.pageX) + "px")
                                     .css("top", (d3.event.pageY - 28) + "px")
                             }
@@ -286,9 +166,10 @@ d3.json("http://localhost:8080/data/md-counties.json")
                         .duration(500)
                         .style("fill", d => {
                             var county = d.properties["NAME"];
+                            var year = getYear();
                             var n = "#eee";
-                            if (data[county] != undefined) {
-                                n = data[county][0][formData];
+                            if (map_data[year][county] != undefined) {
+                                n = map_data[year][county][0][formData];
                                 n = getCategory(n);
                                 n = colors[formData][n];
                             }
@@ -298,8 +179,6 @@ d3.json("http://localhost:8080/data/md-counties.json")
 
                 function zoomMap(d) {
                     console.log(d);
-
-
                     const [
                         [x0, y0],
                         [x1, y1]
@@ -332,7 +211,7 @@ function updateLegend() {
     $("#legend").empty();
     legend = d3.select("#legend").append("svg")
         .attr("class", "legend")
-        .attr("width", 140)
+        .attr("width", 180)
         .attr("height", 200)
         .selectAll("g")
         .data(green[formData].domain().slice())
@@ -357,13 +236,149 @@ function updateLegend() {
         });
 }
 
+function dropdownChange() {
+    $(".currentCounty").removeClass("currentCounty");
+    var county = $(this).val();
+    var i = -1;
+
+    switch (county) {
+        case "ALLEGANY COUNTY PUBLIC SCHOOLS":
+            county = "#Allegany";
+            i = 0;
+            break;
+        case "ANNE ARUNDEL CO SCHS":
+            county = "#AnneArundel";
+            i = 1;
+            break;
+        case "CHARLES CO SCHS":
+            county = "#Charles";
+            i = 2;
+            break;
+        case "DORCHESTER CO SCHS":
+            county = "#Dorchester";
+            i = 3;
+            break;
+        case "HOWARD COUNTY SCHOOLS":
+            county = "#Howard";
+            i = 4;
+            break;
+        case "KENT COUNTY SCHOOLS":
+            county = "#Kent";
+            i = 5;
+            break;
+        case "QUEEN ANNES COUNTY SCHOOLS":
+            county = "#QueenAnnes";
+            i = 6;
+            break;
+        case "ST MARYS CO SCHS":
+            county = "#StMarys";
+            i = 7;
+            break;
+        case "TALBOT CO SCHS":
+            county = "#Talbot";
+            i = 8;
+            break;
+        case "WASHINGTON CO SCHS":
+            county = "#Washington";
+            i = 9;
+            break;
+        case "BALTIMORE COUNTY SCHOOLS":
+            county = "#Baltimore";
+            i = 10;
+            break;
+        case "CALVERT CO SCHS":
+            county = "#Calvert";
+            i = 11;
+            break;
+        case "CAROLINE CO SCHS":
+            county = "#Caroline";
+            i = 12;
+            break;
+        case "CARROLL CO SCHS":
+            county = "#Carroll";
+            i = 13;
+            break;
+        case "CECIL COUNTY PUBLIC SCHOOLS":
+            county = "#Cecil";
+            i = 14;
+            break;
+        case "FREDERICK CO SCHOOLS":
+            county = "#Frederick";
+            i = 15;
+            break;
+        case "GARRETT COUNTY SCHOOLS":
+            county = "#Garrett";
+            i = 16;
+            break;
+        case "HARFORD CO SCH":
+            county = "#Harford";
+            i = 17;
+            break;
+        case "MONTGOMERY COUNTY SCHOOLS":
+            county = "#Montgomery";
+            i = 18;
+            break;
+        case "PRINCE GEORGES CO SCHS":
+            county = "#PrinceGeorges";
+            i = 19;
+            break;
+        case "WICOMICO CO SCHOOLS":
+            county = "#Wicomico";
+            i = 20;
+            break;
+        case "WORCESTER CO BOARD OF EDUCATION":
+            county = "#Worcester";
+            i = 21;
+            break;
+        case "BALTIMORE CITY SCHOOLS":
+            county = "#BaltimoreCity";
+            i = 22;
+            break;
+        case "SOMERSET CO SCHS":
+            county = "#Somerset";
+            i = 23;
+            break;
+        default:
+            county = "";
+            i = -1;
+            break;
+
+    }
+    // var c = geo_json.features[i];
+    // console.log(c);
+    $(county).addClass("currentCounty");
+
+
+    // var bounds = path.bounds(c),
+    //     dx = bounds[1][0] - bounds[0][0],
+    //     dy = bounds[1][1] - bounds[0][1],
+    //     x = (bounds[0][0] + bounds[1][0]) / 2,
+    //     y = (bounds[0][1] + bounds[1][1]) / 2,
+    //     scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
+    //     translate = [width / 2 - scale * x, height / 2 - scale * y];
+    //
+    // svg.transition()
+    //     .duration(750)
+    //     // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
+    //     .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)); // updated for d3 v4
+    //
+    //
+    // console.log("CHANGED: " + county);
+    // console.log(bounds);
+
+}
+
 // returns true if the data value is numeric
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
 
 function getCategory(num) {
-    if (formData === "median_list_price_county" || formData === "median_list_price_district") {
+    if (!num) {
+        return;
+    }
+    num = parseInt(num.replace(/\W+/g, ""));
+    if (formData === "median_price" || formData === "median_list_price_county" || formData === "median_list_price_district") {
         if (!isNumeric(num)) {
             return 0;
         } else if (num < 200000) {
@@ -401,7 +416,6 @@ function getCategory(num) {
 }
 
 function getFormData() {
-    var data = $("#form").serializeArray();
-    console.log(data);
-    return !data.length == 0 ? data[0].value : "";
+    var form_data = $("#form").serializeArray();
+    return !form_data.length == 0 ? form_data[0].value : "";
 }
