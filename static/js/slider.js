@@ -4,112 +4,126 @@ d3.json("http://localhost:8080/../../data/yeardata.json")
   })
   .catch((e) => console.log(e));
 
-function updateFundingOverviewGraph(allData) {
-  console.log("slider > funding overview update");
+function updateFundingOverviewGraph() {
+  d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
+  .then((data) => {
+    console.log("slider > funding overview update");
 
-  var year = document.getElementById("time-div").getAttribute("year");
-  var county = document.getElementById("dropdown").getAttribute("county");
-  var chart = document.getElementById("funding-overview");
+    var year = document.getElementById("time-div").getAttribute("year");
+    var county = document.getElementById("dropdown").getAttribute("county");
 
-  // update the graph
-  console.log("slider > funding overview update");
-
-  // approach: find the current year
-  var yearData = getYearData(allData, year);
-
-  toGraph = [];
-
-  for (var key in yearData) {
-    if (yearData.hasOwnProperty(key)) {
-      toGraph.push(yearData[key]);
-      // console.log(yearData[key].TOTALREV);
-    }
-  }
-
-  // clear the current graph
-  $("#funding-overview").empty();
-
-  toGraph.sort(function (b, a) {
-    return a.TOTALREV - b.TOTALREV;
-  });
-
-  // GRAPHING
-  var svgChart = d3
-    .select(chart)
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  // X axis
-  var x = d3
-    .scaleBand()
-    .range([0, width])
-    .domain(
-      toGraph.map(function (d) {
-        return d.NAME;
-      })
-    )
-    .padding(0.2);
-
-  svgChart
-    .append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "translate(-10,0)rotate(-45)")
-    .style("text-anchor", "end");
-
-  // Y axis
-  var y = d3.scaleLinear().domain([0, toGraph[0].TOTALREV]).range([height, 0]);
-  svgChart.append("g").call(d3.axisLeft(y));
-
-  // Y Label
-  svgChart
-    .append("text")
-    .attr("class", "label")
-    .attr("x", -(height / 3) - margin.top)
-    .attr("y", -margin.left / 2)
-    .attr("transform", "rotate(-90)")
-    .attr("text-anchor", "middle")
-    .text("Total Funding ($)");
-
-  // Bars
-  svgChart
-    .selectAll("bars")
-    .data(toGraph)
-    .enter()
-    .append("rect")
-    .attr("x", function (d) {
-      return x(d.NAME);
-    })
-    .attr("y", function (d) {
-      return y(d.TOTALREV);
-    })
-    .attr("width", x.bandwidth())
-    .attr("height", function (d) {
-      return height - y(d.TOTALREV);
-    })
-    .attr("fill", function (d) {
-      if (d.NAME == county) return "red";
-      else return "#69b3a2";
-    })
-    .on("mouseenter", function (actual, i) {
-      d3.selectAll(".value").attr("opacity", 0);
-
-      const countyY = y(actual.TOTALREV);
-      console.log("selected", actual, countyY);
-
-      svgChart
-        .append("line")
-        .attr("class", "limit")
-        .attr("x1", 0)
-        .attr("y1", countyY)
-        .attr("x2", width)
-        .attr("y2", countyY);
-    });
+    // update the graph
+    createOverviewChart(data, county, year);
+  })
+  .catch((e) => console.log(e));
+  
 }
+// function updateFundingOverviewGraph(allData) {
+//   console.log("slider > funding overview update");
+
+//   var year = document.getElementById("time-div").getAttribute("year");
+//   var county = document.getElementById("dropdown").getAttribute("county");
+//   var chart = document.getElementById("funding-overview");
+
+//   // update the graph
+//   console.log("slider > funding overview update");
+
+//   // approach: find the current year
+//   var yearData = getYearData(allData, year);
+
+//   toGraph = [];
+
+//   for (var key in yearData) {
+//     if (yearData.hasOwnProperty(key)) {
+//       toGraph.push(yearData[key]);
+//       // console.log(yearData[key].TOTALREV);
+//     }
+//   }
+
+//   // clear the current graph
+//   $("#funding-overview").empty();
+
+//   toGraph.sort(function (b, a) {
+//     return a.TOTALREV - b.TOTALREV;
+//   });
+
+//   // GRAPHING
+//   var svgChart = d3
+//     .select(chart)
+//     .append("svg")
+//     .attr("width", width + margin.left + margin.right)
+//     .attr("height", height + margin.top + margin.bottom)
+//     .append("g")
+//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//   // X axis
+//   var x = d3
+//     .scaleBand()
+//     .range([0, width])
+//     .domain(
+//       toGraph.map(function (d) {
+//         return d.NAME;
+//       })
+//     )
+//     .padding(0.2);
+
+//   svgChart
+//     .append("g")
+//     .attr("transform", "translate(0," + height + ")")
+//     .call(d3.axisBottom(x))
+//     .selectAll("text")
+//     .attr("transform", "translate(-10,0)rotate(-45)")
+//     .style("text-anchor", "end");
+
+//   // Y axis
+//   var y = d3.scaleLinear().domain([0, toGraph[0].TOTALREV]).range([height, 0]);
+//   svgChart.append("g").call(d3.axisLeft(y));
+
+//   // Y Label
+//   svgChart
+//     .append("text")
+//     .attr("class", "label")
+//     .attr("x", -(height / 3) - margin.top)
+//     .attr("y", -margin.left / 2)
+//     .attr("transform", "rotate(-90)")
+//     .attr("text-anchor", "middle")
+//     .text("Total Funding ($)");
+
+//   // Bars
+//   svgChart
+//     .selectAll("bars")
+//     .data(toGraph)
+//     .enter()
+//     .append("rect")
+//     .attr("x", function (d) {
+//       return x(d.NAME);
+//     })
+//     .attr("y", function (d) {
+//       return y(d.TOTALREV);
+//     })
+//     .attr("width", x.bandwidth())
+//     .attr("height", function (d) {
+//       return height - y(d.TOTALREV);
+//     })
+//     .attr("fill", function (d) {
+//       if (d.NAME == county) return "red";
+//       else return "#69b3a2";
+//     })
+//     .on("mouseenter", function (actual, i) {
+//       d3.selectAll(".value").attr("opacity", 0);
+
+//       const countyY = y(actual.TOTALREV);
+//       console.log("selected", actual, countyY);
+
+//       svgChart
+//         .append("line")
+//         .attr("class", "limit")
+//         .attr("x1", 0)
+//         .attr("y1", countyY)
+//         .attr("x2", width)
+//         .attr("y2", countyY);
+//     });
+// }
 
 function getYearData(allData, year) {
   for (var i = 0; i < allData.length; i++) {
@@ -275,7 +289,7 @@ function timeHandler(allData) {
 
       //  update graphs here
       updateRevenueGraph(allData);
-      updateFundingOverviewGraph(allData);
+      updateFundingOverviewGraph();
     });
 
   var gTime = d3
