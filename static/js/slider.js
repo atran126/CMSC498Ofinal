@@ -5,7 +5,6 @@ d3.json("http://localhost:8080/../../data/yeardata.json")
     .catch((e) => console.log(e));
 
 function updateFundingOverviewGraph(allData) {
-<<<<<<< HEAD
 
 
   var year = document.getElementById("time-div").getAttribute("year");
@@ -31,35 +30,6 @@ function updateFundingOverviewGraph(allData) {
     if (yearData.hasOwnProperty(key)) {
       toGraph.push(yearData[key]);
       // console.log(yearData[key].TOTALREV);
-=======
-    // console.log("slider > funding overview update");
-
-    var year = document.getElementById("time-div").getAttribute("year");
-    var county = document.getElementById("dropdown").getAttribute("county");
-    var chart = document.getElementById("funding-overview");
-    var margin = {
-            top: 30,
-            right: 30,
-            bottom: 150,
-            left: 150
-        },
-        width = 800 - margin.left - margin.right,
-        height = 800 - margin.top - margin.bottom;
-
-    // update the graph
-    // console.log("slider > funding overview update");
-
-    // approach: find the current year
-    var yearData = getYearData(allData, year);
-
-    toGraph = [];
-
-    for (var key in yearData) {
-        if (yearData.hasOwnProperty(key)) {
-            toGraph.push(yearData[key]);
-            // console.log(yearData[key].TOTALREV);
-        }
->>>>>>> c40a25a464e49387b2dbe3a2472e46c78a8120d2
     }
 }
 
@@ -150,6 +120,7 @@ svgChart
     .on('mouseleave', function() {
         svgChart.select("#line-limit").remove();
     });
+  }
 
 function getYearData(allData, year) {
     for (var i = 0; i < allData.length; i++) {
@@ -161,7 +132,7 @@ function getYearData(allData, year) {
 
 // when the time slider changes, need to update each graph accordingly
 function updateRevenueGraph(allData) {
-<<<<<<< HEAD
+
   // get necessary variables
   var year = document.getElementById("time-div").getAttribute("year");
   var county = document.getElementById("dropdown").getAttribute("county");
@@ -173,77 +144,6 @@ function updateRevenueGraph(allData) {
   var graphData = isolateData(countyData);
   makeChart(graphData, chart);
 
-
-=======
-    // get necessary variables
-    var year = document.getElementById("time-div").getAttribute("year");
-    var county = document.getElementById("dropdown").getAttribute("county");
-    var chart = document.getElementById("revenue-breakdown");
-
-    // isolate the county data
-    var countyData = getCountyData(allData, year, county);
-
-    // within county data, get data to graph
-    var graphData = isolateData(countyData);
-
-    $("#revenue-breakdown").empty();
-    var revenue = ["Total", "Federal", "State", "Local"];
-    var colors = ["b82a04", "b82a04", "e1a61c", "040300"];
-
-    // xBand
-    var xBand = d3
-        .scaleBand()
-        .domain(revenue)
-        .range([margins.lft, width - margins.rt])
-        .paddingInner(0.2);
-
-    // Height scale function
-    var hScale = d3
-        .scaleLinear()
-        .domain([1, graphData[0].value])
-        //.domain([1, 3000000])
-        .range([height - margins.btm - margins.tp, 0]);
-
-    // Creates bar chart
-    d3.select(chart)
-        .selectAll("rect")
-        .data(graphData)
-        .enter()
-        .append("rect")
-        .attr("x", (d) => xBand(d.name) + "px")
-        .attr("y", (d) => margins.tp + hScale(d.value) + "px")
-        .attr("width", xBand.bandwidth())
-        .attr("height", (d) => height - margins.tp - margins.btm - hScale(d.value))
-        .attr("fill", "#b72506")
-        .append("svg:title")
-
-        .text(function(d) {
-            return d.display;
-        });
-
-    // Use http://bl.ocks.org/mstanaland/6100713 for stacked bar chart
-
-    // X-axis
-    d3.select(chart)
-        .append("g")
-        .attr("transform", `translate(0,${height - margins.btm})`)
-        .call(d3.axisBottom(xBand));
-
-    // Y-axis
-    d3.select(chart)
-        .append("g")
-        .attr("transform", `translate(${margins.lft}, ${margins.tp})`)
-        .call(d3.axisLeft(hScale));
-
-    // Y-axis label
-    d3.select(chart)
-        .append("text")
-        .attr("x", 0 - height / 2)
-        .attr("y", 15)
-        .attr("transform", "rotate(-90)")
-        .style("text-anchor", "middle")
-        .text("Revenue ($)");
->>>>>>> c40a25a464e49387b2dbe3a2472e46c78a8120d2
 }
 
 function getCountyData(allData, year, county) {
@@ -255,7 +155,7 @@ function getCountyData(allData, year, county) {
 }
 
 function isolateData(countyData) {
-<<<<<<< HEAD
+
   var obj = [];
 
   var total = {};
@@ -340,56 +240,7 @@ function isolateData(countyData) {
   obj.push(state);
   obj.push(local);
   return obj;
-=======
-    console.log(countyData);
-    var obj = [];
 
-    var total = {};
-    var federal = {};
-    var state = {};
-    var local = {};
-    total.value = countyData.TOTALREV;
-    total.name = "Total";
-
-    federal.value = countyData.TFEDREV;
-    federal.name = "Federal";
-    // Adding items for tooltip
-    federal.display = "Total federal funding: $" + countyData.TFEDREV;
-    federal.display += "\nCompensatory(Title I): $" + countyData.C14;
-    federal.display += "\n Children with disabilites: $" + countyData.C15;
-    federal.display += "\n Child Nutrition Act: $" + countyData.C25;
-    federal.display += "\n All other federal aid: $" + countyData.B13;
-
-
-    state.value = countyData.TSTREV;
-    state.name = "State";
-    // Adding items for tooltip
-    state.display = "Total state funding: $" + countyData.TSTREV;
-    state.display += "\nGeneral formula assistance: $" + countyData.C01;
-    state.display += "\nSpecial education programs: $" + countyData.C05;
-    state.display += "\nCompensatory and basic skills attainment programs : $" + countyData.C06;
-    state.display += "\nBilingual Education programs : $" + countyData.C07;
-    state.display += "\nSchool Lunch programs : $" + countyData.C10;
-    state.display += "\nTransportation programs: $" + countyData.C12;
-    state.display += "\nAll other state revenue: $" + countyData.C13;
-
-    local.value = countyData.TLOCREV;
-    local.name = "Local";
-    // Adding items for tooltip
-    local.display = "Total local funding: $" + countyData.TLOCREV;
-    local.display += "\nParent government contributions : $" + countyData.T02;
-    local.display += "\nTransportation Fees: $" + countyData.A08;
-    local.display += "\nSchool lunch revenues: $" + countyData.A09;
-    local.display += "\nOther sales and service revenues: $" + countyData.A20;
-    local.display += "\nInterest Earnings: $" + countyData.U22;
-    local.display += "\nOther local revenues: $" + countyData.U97;
-
-    obj.push(total);
-    obj.push(federal);
-    obj.push(state);
-    obj.push(local);
-    return obj;
->>>>>>> c40a25a464e49387b2dbe3a2472e46c78a8120d2
 }
 
 function timeHandler(allData) {
