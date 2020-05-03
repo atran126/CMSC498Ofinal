@@ -81,17 +81,35 @@ d3.select(chart)
       .attr("y", (d) => margins.tp + hScale(d[1]) + "px")
       .attr("height", function(d) { return hScale(d[0]) - hScale(d[1]); })
       .attr("width", xBand.bandwidth())
+      .append("svg:title")
 
-      // More information on hover
-      .on("mouseover", function() { tooltip.style("display", null); })
-      .on("mouseout", function() { tooltip.style("display", "none"); })
-      .on("mousemove", function(d) {
-        console.log(d);
-        var xPosition = d3.mouse(this)[0] - 5;
-        var yPosition = d3.mouse(this)[1] - 5;
-        tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-        tooltip.select("text").text("AHRARWHAHE");
-      });
+    .text(function(d) {
+      var val = d[1] - d[0];
+      if (d.data.cat1 == val) {
+        return d.data.cat1display;
+      }
+
+      else if (d.data.cat2 == val) {
+        return d.data.cat2display;
+      }
+      else if (d.data.cat3 == val) {
+        return d.data.cat3display;
+      }
+      else if (d.data.cat4 == val) {
+        return d.data.cat4display;
+      }
+      else if (d.data.cat5 == val) {
+        return d.data.cat5display;
+      }
+      else if (d.data.cat6 == val) {
+        return d.data.cat6display;
+      }
+      else  {
+        return d.data.cat7display;
+      }
+    });
+
+
 
 
   // X-axis
@@ -116,7 +134,7 @@ d3.select(chart)
     .text("Revenue ($)");
 
     // Prep the tooltip bits, initial display is hidden
-  var tooltip = svg.append("g")
+  var tooltip = d3.select(chart).append("g")
     .attr("class", "tooltip")
     .style("display", "none");
 
@@ -153,67 +171,74 @@ function filterData(county, jsonTuples) {
           total.cat5 = 0;
           total.cat6 = 0;
           total.cat7 = countyData.TOTALREV;
+          total.cat1display = "";
+          total.cat2display = "";
+          total.cat3display = "";
+          total.cat4display = "";
+          total.cat5display = "";
+          total.cat6display = "";
+          total.cat7display = "Total: $" + total.cat7;
 
           federal.value = countyData.TFEDREV;
           federal.name = "Federal";
           // Adding categories for stacked bars
-          federal.cat1 = countyData.C14;
-          federal.cat2 = countyData.C15;
-          federal.cat3 =  countyData.C16;
-          federal.cat4 = countyData.C19;
-          federal.cat5 = countyData.B11;
-          federal.cat6 = countyData.C25;
-          federal.cat7 = countyData.TFEDREV - (federal.cat1 + federal.cat2 + federal.cat3 + federal.cat4 + federal.cat5 + federal.cat6);
+          federal.cat1 = parseInt(countyData.C14);
+          federal.cat2 = parseInt(countyData.C15);
+          federal.cat3 =  parseInt(countyData.C16);
+          federal.cat4 = parseInt(countyData.C19);
+          federal.cat5 = parseInt(countyData.B11);
+          federal.cat6 = parseInt(countyData.C25);
+          federal.cat7 = parseInt(countyData.TFEDREV) - (federal.cat1 + federal.cat2 + federal.cat3 + federal.cat4 + federal.cat5 + federal.cat6);
 
 
           // Adding items for tooltip
-          federal.cat1display = "Compensatory(Title I): $" + countyData.C14;
-          federal.cat2display = "Children with disabilites: $" + countyData.C15;
+          federal.cat1display = "Compensatory(Title I): $" + federal.cat1;
+          federal.cat2display = "Children with disabilites: $" + federal.cat2;
           federal.cat3display = "Math, science, and teacher quality: $" + federal.cat3;
           federal.cat4display = "Vocational and technical education: $" + federal.cat4;
           federal.cat5display = "Bilingual education: $" + federal.cat5;
-          federal.cat6display = "Child Nutrition Act: $" + countyData.C25;
+          federal.cat6display = "Child Nutrition Act: $" + federal.cat6;
           federal.cat7display = "All other federal aid: $" + federal.cat7;
 
 
           state.value = countyData.TSTREV;
           state.name = "State";
 
-          state.cat1 = countyData.C01;
-          state.cat2 = countyData.C05;
-          state.cat3 = countyData.C06;
-          state.cat4 = countyData.C07;
-          state.cat5 = countyData.C10;
-          state.cat6 = countyData.C12;
-          state.cat7 = countyData.TSTREV - (state.cat1 + state.cat2 + state.cat3 + state.cat4 + state.cat5 + state.cat6);
+          state.cat1 = parseInt(countyData.C01);
+          state.cat2 = parseInt(countyData.C05);
+          state.cat3 = parseInt(countyData.C06);
+          state.cat4 = parseInt(countyData.C07);
+          state.cat5 = parseInt(countyData.C10);
+          state.cat6 = parseInt(countyData.C12);
+          state.cat7 = parseInt(countyData.TSTREV) - (state.cat1 + state.cat2 + state.cat3 + state.cat4 + state.cat5 + state.cat6);
 
           // Adding items for tooltip
-          state.cat1display = "General formula assistance: $" + countyData.C01;
-          state.cat2display = "Special education programs: $" + countyData.C05;
-          state.cat3display = "Compensatory and basic skills attainment programs : $" + countyData.C06;
-          state.cat4display = "Bilingual Education programs : $" + countyData.C07;
-          state.cat5display = "School Lunch programs : $" + countyData.C10;
-          state.cat6display = "Transportation programs: $" + countyData.C12;
+          state.cat1display = "General formula assistance: $" + state.cat1;
+          state.cat2display = "Special education programs: $" + state.cat2;
+          state.cat3display = "Compensatory and basic skills attainment programs : $" + state.cat3;
+          state.cat4display = "Bilingual Education programs : $" + state.cat4;
+          state.cat5display = "School Lunch programs : $" + state.cat5;
+          state.cat6display = "Transportation programs: $" + state.cat6;
           state.cat7display = "All other state revenue: $" + state.cat7;
 
           local.value = countyData.TLOCREV;
           local.name = "Local";
 
 
-          local.cat1 = countyData.T02;
-          local.cat2 = countyData.A08;
-          local.cat3 = countyData.A09;
-          local.cat4 = countyData.A20;
-          local.cat5 = countyData.U22;
-          local.cat6 = countyData.A07;
-          local.cat7 = countyData.TLOCREV - (local.cat1 + local.cat2 + local.cat3 + local.cat4 + local.cat5 + local.cat6);
+          local.cat1 = parseInt(countyData.T02);
+          local.cat2 = parseInt(countyData.A08);
+          local.cat3 = parseInt(countyData.A09);
+          local.cat4 = parseInt(countyData.A20);
+          local.cat5 = parseInt(countyData.U22);
+          local.cat6 = parseInt(countyData.A07);
+          local.cat7 = parseInt(countyData.TLOCREV) - (local.cat1 + local.cat2 + local.cat3 + local.cat4 + local.cat5 + local.cat6);
 
           // Adding items for tooltip
-          local.cat1display = "Parent government contributions : $" + countyData.T02;
-          local.cat2display = "Transportation Fees: $" + countyData.A08;
-          local.cat3display = "School lunch revenues: $" + countyData.A09;
-          local.cat4display = "Other sales and service revenues: $" + countyData.A20;
-          local.cat5display = "Interest Earnings: $" + countyData.U22;
+          local.cat1display = "Parent government contributions : $" + local.cat1;
+          local.cat2display = "Transportation Fees: $" + local.cat2;
+          local.cat3display = "School lunch revenues: $" + local.cat3;
+          local.cat4display = "Other sales and service revenues: $" + local.cat4;
+          local.cat5display = "Interest Earnings: $" + local.cat5;
           local.cat6display = "Tuition fees: $" + local.cat6;
           local.cat7display = "Other local revenues: $" + local.cat7;
 
