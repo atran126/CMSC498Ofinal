@@ -20,6 +20,7 @@
     
 
     <div class="container">
+        <h1> Our Beautiful Project :))))))))))))</h1>
         <div id="dropdown-cont">
             <select county="default" id="dropdown">
                 <option value="se">Select county</option>
@@ -49,21 +50,12 @@
                 <option value="WORCESTER CO BOARD OF EDUCATION">Worcester County</option>
             </select>
         </div>
-    
-        <p id="time-label" year="2017">Select Year</p>
-        <div year="2005" id="time-div" class="row align-items-center">
-            <div class="col-sm-2"><p id="value-time"></p></div>
-            <div class="col-sm"><div id="slider-time"></div></div>
-        </div>
-
-
-        
+        <hr>
         <div class="row">
             <div class ="col-sm-9">
-                <div id="map"></div>
                 <div id="menu">
-                    <span class="h3">Metric</span>
-                    <hr>
+                    <!-- <span class="h3">Metric</span>
+                    <hr> -->
                     <form id="form" action="index.html" method="post">
                         <section>
                             <label>
@@ -97,21 +89,42 @@
                     </form>
                     <div style="margin-top: 10px;"></div>
             
-                    <span class="h3">legend</span>
-                    <hr>
-                    <div id="legend"></div>
+                    <!-- <span class="h3">legend</span>
+                    <hr> -->
+                   
             
                 </div>
+                <div id="map"></div>
+                <div id="legend"></div>
+               
                 
             </div>
             
             <div class ="col-sm-3">
+                
+                <div id = "text-box">
+                    <h1> County Name</h1>
+                    <ul>
+                        <li> Total state funding:</li>
+                        <li> Average School Rating:</li>
+                        <li> Median List Price</li>
+                    </ul>
+                </div>
+
                 <div>
-                    <svg id="revenue-breakdown" width="400" height="800"></svg>
+                    <svg id="revenue-breakdown" width="400" height="400"></svg>
+                </div>
+                <div id= "slider">
+
+                    <p id="time-label" year="2017">Select Year</p>
+                    <div year="2011" id="time-div" class="row align-items-center">
+                        <div class="col-sm-2"><p id="value-time"></p></div>
+                        <div class="col-sm"><div id="slider-time"></div></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <svg id="funding-overview" width="1200" height="800"></svg>
+                <svg id="funding-overview" width="1000" height="300"></svg>
             </div>
         </div>
    </div>

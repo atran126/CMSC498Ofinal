@@ -6,3 +6,6 @@ a, p {
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 16px;
 }
+#revenue-breakdown {
+  transform: translate(50px,50px)
+}

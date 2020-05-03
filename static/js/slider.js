@@ -265,8 +265,8 @@ function isolateData(countyData) {
 }
 
 function timeHandler(allData) {
-  var dataTime = d3.range(0, 15).map(function (d) {
-    return new Date(2003 + d, 10, 3);
+  var dataTime = d3.range(0, 6).map(function (d) {
+    return new Date(2011 + d, 6, 3);
   });
 
   var slider = d3
@@ -274,10 +274,10 @@ function timeHandler(allData) {
     .min(d3.min(dataTime))
     .max(d3.max(dataTime))
     .step(1000 * 60 * 60 * 24 * 365)
-    .width(800)
+    .width(350)
     .tickFormat(d3.timeFormat("%Y"))
     .tickValues(dataTime)
-    .default(new Date(2005, 10, 3))
+    .default(new Date(2011, 10, 3))
     .on("onchange", (val) => {
       var currYear = d3.timeFormat("%Y")(val);
 

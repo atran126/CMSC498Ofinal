@@ -24,7 +24,7 @@ var margins = {
     rt: 30
 };
 var width = 400;
-var height = 600;
+var height = 500;
 
 function submission() {
     console.log("Hello");

@@ -30,8 +30,8 @@ function createOverviewChart(data, county, currYear) {
         bottom: 150,
         left: 150
     },
-    currwidth = 900 - currmargin.left - currmargin.right,
-    currheight = 400 - currmargin.top - currmargin.bottom;
+    currwidth = 1000 - currmargin.left - currmargin.right,
+    currheight = 300 - currmargin.top - currmargin.bottom;
 
     // sort data
     data.sort(function(b, a) {
