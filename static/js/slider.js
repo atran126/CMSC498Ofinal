@@ -120,10 +120,8 @@ svgChart
 
     })
     .on('mouseleave', function() {
-        svgChart.select("#line-limit").remove()
-
-    })
-}
+        svgChart.select("#line-limit").remove();
+    });
 
 function getYearData(allData, year) {
     for (var i = 0; i < allData.length; i++) {
@@ -277,12 +275,13 @@ function timeHandler(allData) {
         .width(800)
         .tickFormat(d3.timeFormat("%Y"))
         .tickValues(dataTime)
-        .default(new Date(2005, 10, 3))
+        .default(new Date(2007, 10, 3))
         .on("onchange", (val) => {
             var currYear = d3.timeFormat("%Y")(val);
 
             // updates year attribute in HTML div
             document.getElementById("time-div").setAttribute("year", currYear);
+            // $("#time-div").data("year", currYear);
 
             // document.getElementById("time-label").setAttribute("year", currYear);
             d3.select("p#time-label").text(currYear);

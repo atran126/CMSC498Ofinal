@@ -13,6 +13,7 @@ var path = d3.geoPath()
     .projection(projection)
 
 var categories = {
+    median_price: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
     median_list_price_district: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
     median_list_price_county: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
     days_on_market_county: ["No Data", "0-50", "50-100", ">100"],
@@ -21,6 +22,7 @@ var categories = {
 }
 
 var colors = {
+    median_price: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
     median_list_price_district: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
     median_list_price_county: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
     days_on_market_county: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
@@ -29,6 +31,7 @@ var colors = {
 }
 
 var green = {
+    median_price: getScale("median_price"),
     median_list_price_district: getScale("median_list_price_district"),
     median_list_price_county: getScale("median_list_price_county"),
     days_on_market_county: getScale("days_on_market_county"),
@@ -86,30 +89,37 @@ d3.json("http://localhost:8080/data/md-counties.json")
             .style("stroke", "#fff")
             .style("stroke-width", "1");
 
-        d3.json("http://localhost:8080/data/house_prices.json")
-            .then(house_prices => {
-                map_data = house_prices;
+        d3.json("http://localhost:8080/data/house_prices_historical.json")
+            .then(map_data => {
                 $("#dropdown").change(dropdownChange);
                 $("input").click(updateMap);
                 $("input").click(updateLegend);
+                $("#time-div").change(updateMap)
+                // .change(updateLegend);
                 // d3.select("#dropdown").on("change", zoomMap)
 
                 tooltips();
 
                 // map realtor data to make it easier to access
                 map_data = d3.nest()
+                    .key(item => item.year)
                     .key(item => item.county)
                     .object(map_data);
 
+                function getYear() {
+                    return $("#time-label").attr("year");
+                }
+
                 // fill in colors
                 paths.style("fill", d => {
+                    var year = getYear();
                     var county = d.properties["NAME"];
 
                     // no data, should we get find some?
-                    if (!map_data[county]) {
+                    if (!map_data[year][county]) {
                         return "#eee";
                     } else {
-                        var n = map_data[county][0][formData];
+                        var n = map_data[year][county][0][formData];
                         n = getCategory(n);
                         return colors[formData][n]
                     }
@@ -123,17 +133,18 @@ d3.json("http://localhost:8080/data/md-counties.json")
                 function tooltips() {
                     paths.on("mouseover", function(d) {
                             $(".tooltip").empty();
+                            var year = getYear();
                             var county = d.properties["NAME"];
 
-                            if (map_data[county] != undefined) {
-                                var num = map_data[county][0][formData];
+                            if (map_data[year][county] != undefined) {
+                                var num = map_data[year][county][0][formData];
                                 div.transition()
                                     .duration(200)
                                     .style("opacity", .9);
 
                                 $(".tooltip").append(county)
                                     .append("<hr>")
-                                    .append(map_data[county][0][formData])
+                                    .append(num)
                                     .css("left", (d3.event.pageX) + "px")
                                     .css("top", (d3.event.pageY - 28) + "px")
                             }
@@ -155,9 +166,10 @@ d3.json("http://localhost:8080/data/md-counties.json")
                         .duration(500)
                         .style("fill", d => {
                             var county = d.properties["NAME"];
+                            var year = getYear();
                             var n = "#eee";
-                            if (map_data[county] != undefined) {
-                                n = map_data[county][0][formData];
+                            if (map_data[year][county] != undefined) {
+                                n = map_data[year][county][0][formData];
                                 n = getCategory(n);
                                 n = colors[formData][n];
                             }
@@ -199,7 +211,7 @@ function updateLegend() {
     $("#legend").empty();
     legend = d3.select("#legend").append("svg")
         .attr("class", "legend")
-        .attr("width", 140)
+        .attr("width", 180)
         .attr("height", 200)
         .selectAll("g")
         .data(green[formData].domain().slice())
@@ -362,7 +374,11 @@ function isNumeric(n) {
 }
 
 function getCategory(num) {
-    if (formData === "median_list_price_county" || formData === "median_list_price_district") {
+    if (!num) {
+        return;
+    }
+    num = parseInt(num.replace(/\W+/g, ""));
+    if (formData === "median_price" || formData === "median_list_price_county" || formData === "median_list_price_district") {
         if (!isNumeric(num)) {
             return 0;
         } else if (num < 200000) {
