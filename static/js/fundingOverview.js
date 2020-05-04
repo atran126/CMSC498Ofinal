@@ -108,7 +108,7 @@ function createOverviewChart(data, county, currYear) {
                     .attr('opacity', 0)
 
                 const countyY = y(actual.PPCSTOT)
-                console.log("selected", actual, countyY);
+                //console.log("selected", actual, countyY);
 
                 svgChart.append('line')
                     .attr('id', 'line-limit')
