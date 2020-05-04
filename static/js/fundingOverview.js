@@ -26,10 +26,10 @@ function createOverviewChart(data, county, currYear) {
     var currmargin = {
         top: 30,
         right: 30,
-        bottom: 150,
+        bottom: 175,
         left: 150
     },
-    currwidth = 1000 - currmargin.left - currmargin.right,
+    currwidth = 700- currmargin.left - currmargin.right,
     currheight = 300 - currmargin.top - currmargin.bottom;
 
     // sort data

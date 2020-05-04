@@ -1,10 +1,11 @@
+var sliderWidth = 350;
+
 d3.json("http://localhost:8080/../../data/yeardata.json")
     .then((data) => {
         timeHandler(data);
     })
     .catch((e) => console.log(e));
 
-<<<<<<< HEAD
 function updateFundingOverviewGraph() {
   d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
   .then((data) => {
@@ -19,231 +20,6 @@ function updateFundingOverviewGraph() {
   .catch((e) => console.log(e));
   
 }
-// function updateFundingOverviewGraph(allData) {
-//   console.log("slider > funding overview update");
-
-//   var year = document.getElementById("time-div").getAttribute("year");
-//   var county = document.getElementById("dropdown").getAttribute("county");
-//   var chart = document.getElementById("funding-overview");
-
-//   // update the graph
-//   console.log("slider > funding overview update");
-
-//   // approach: find the current year
-//   var yearData = getYearData(allData, year);
-
-//   toGraph = [];
-
-//   for (var key in yearData) {
-//     if (yearData.hasOwnProperty(key)) {
-//       toGraph.push(yearData[key]);
-//       // console.log(yearData[key].TOTALREV);
-//     }
-//   }
-
-//   // clear the current graph
-//   $("#funding-overview").empty();
-
-//   toGraph.sort(function (b, a) {
-//     return a.TOTALREV - b.TOTALREV;
-//   });
-
-//   // GRAPHING
-//   var svgChart = d3
-//     .select(chart)
-//     .append("svg")
-//     .attr("width", width + margin.left + margin.right)
-//     .attr("height", height + margin.top + margin.bottom)
-//     .append("g")
-//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-//   // X axis
-//   var x = d3
-//     .scaleBand()
-//     .range([0, width])
-//     .domain(
-//       toGraph.map(function (d) {
-//         return d.NAME;
-//       })
-//     )
-//     .padding(0.2);
-
-//   svgChart
-//     .append("g")
-//     .attr("transform", "translate(0," + height + ")")
-//     .call(d3.axisBottom(x))
-//     .selectAll("text")
-//     .attr("transform", "translate(-10,0)rotate(-45)")
-//     .style("text-anchor", "end");
-
-//   // Y axis
-//   var y = d3.scaleLinear().domain([0, toGraph[0].TOTALREV]).range([height, 0]);
-//   svgChart.append("g").call(d3.axisLeft(y));
-
-//   // Y Label
-//   svgChart
-//     .append("text")
-//     .attr("class", "label")
-//     .attr("x", -(height / 3) - margin.top)
-//     .attr("y", -margin.left / 2)
-//     .attr("transform", "rotate(-90)")
-//     .attr("text-anchor", "middle")
-//     .text("Total Funding ($)");
-
-//   // Bars
-//   svgChart
-//     .selectAll("bars")
-//     .data(toGraph)
-//     .enter()
-//     .append("rect")
-//     .attr("x", function (d) {
-//       return x(d.NAME);
-//     })
-//     .attr("y", function (d) {
-//       return y(d.TOTALREV);
-//     })
-//     .attr("width", x.bandwidth())
-//     .attr("height", function (d) {
-//       return height - y(d.TOTALREV);
-//     })
-//     .attr("fill", function (d) {
-//       if (d.NAME == county) return "red";
-//       else return "#69b3a2";
-//     })
-//     .on("mouseenter", function (actual, i) {
-//       d3.selectAll(".value").attr("opacity", 0);
-
-//       const countyY = y(actual.TOTALREV);
-//       console.log("selected", actual, countyY);
-
-//       svgChart
-//         .append("line")
-//         .attr("class", "limit")
-//         .attr("x1", 0)
-//         .attr("y1", countyY)
-//         .attr("x2", width)
-//         .attr("y2", countyY);
-//     });
-// }
-=======
-function updateFundingOverviewGraph(allData) {
-
-
-  var year = document.getElementById("time-div").getAttribute("year");
-  var county = document.getElementById("dropdown").getAttribute("county");
-  var chart = document.getElementById("funding-overview");
-  var margin = {
-      top: 30,
-      right: 30,
-      bottom: 150,
-      left: 150
-  },
-  width = 800 - margin.left - margin.right,
-  height = 800 - margin.top - margin.bottom;
-
-
-
-  // approach: find the current year
-  var yearData = getYearData(allData, year);
-
-  toGraph = [];
-
-  for (var key in yearData) {
-    if (yearData.hasOwnProperty(key)) {
-      toGraph.push(yearData[key]);
-      // console.log(yearData[key].TOTALREV);
-    }
-}
-
-// clear the current graph
-$("#funding-overview").empty();
-
-toGraph.sort(function(b, a) {
-    return a.TOTALREV - b.TOTALREV;
-});
-
-// GRAPHING
-var svgChart = d3
-    .select(chart)
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// X axis
-var x = d3
-    .scaleBand()
-    .range([0, width])
-    .domain(
-        toGraph.map(function(d) {
-            return d.NAME;
-        })
-    )
-    .padding(0.2);
-
-svgChart
-    .append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "translate(-10,0)rotate(-45)")
-    .style("text-anchor", "end");
-
-// Y axis
-var y = d3.scaleLinear().domain([0, toGraph[0].TOTALREV]).range([height, 0]);
-svgChart.append("g").call(d3.axisLeft(y));
-
-// Y Label
-svgChart
-    .append("text")
-    .attr("class", "label")
-    .attr("x", -(height / 3) - margin.top)
-    .attr("y", -margin.left / 2)
-    .attr("transform", "rotate(-90)")
-    .attr("text-anchor", "middle")
-    .text("Total Funding ($)");
-
-// Bars
-svgChart
-    .selectAll("bars")
-    .data(toGraph)
-    .enter()
-    .append("rect")
-    .attr("x", function(d) {
-        return x(d.NAME);
-    })
-    .attr("y", function(d) {
-        return y(d.TOTALREV);
-    })
-    .attr("width", x.bandwidth())
-    .attr("height", function(d) {
-        return height - y(d.TOTALREV);
-    })
-    .attr("fill", function(d) {
-        if (d.NAME == county) return "red";
-        else return "#69b3a2";
-    })
-    .on('mouseenter', function(actual, i) {
-        d3.selectAll('.value')
-            .attr('opacity', 0)
-
-        const countyY = y(actual.TOTALREV)
-
-
-        svgChart.append('line')
-            .attr('id', 'line-limit')
-            .attr('x1', 0)
-            .attr('y1', countyY)
-            .attr('x2', width)
-            .attr('y2', countyY);
-
-    })
-    .on('mouseleave', function() {
-        svgChart.select("#line-limit").remove();
-    });
-  }
->>>>>>> 86942168170a78a4c20adf5fd780eb6711760476
 
 function getYearData(allData, year) {
     for (var i = 0; i < allData.length; i++) {
@@ -367,36 +143,8 @@ function isolateData(countyData) {
 }
 
 function timeHandler(allData) {
-<<<<<<< HEAD
-  var dataTime = d3.range(0, 6).map(function (d) {
-    return new Date(2011 + d, 6, 3);
-  });
-
-  var slider = d3
-    .sliderBottom()
-    .min(d3.min(dataTime))
-    .max(d3.max(dataTime))
-    .step(1000 * 60 * 60 * 24 * 365)
-    .width(350)
-    .tickFormat(d3.timeFormat("%Y"))
-    .tickValues(dataTime)
-    .default(new Date(2011, 10, 3))
-    .on("onchange", (val) => {
-      var currYear = d3.timeFormat("%Y")(val);
-
-      // updates year attribute in HTML div
-      document.getElementById("time-div").setAttribute("year", currYear);
-
-      // document.getElementById("time-label").setAttribute("year", currYear);
-      d3.select("p#time-label").text(currYear);
-
-      //  update graphs here
-      updateRevenueGraph(allData);
-      updateFundingOverviewGraph();
-=======
-    var dataTime = d3.range(0, 15).map(function(d) {
-        return new Date(2003 + d, 10, 3);
->>>>>>> 86942168170a78a4c20adf5fd780eb6711760476
+    var dataTime = d3.range(0, 7).map(function(d) {
+        return new Date(2011 + d, 6, 3);
     });
 
     var slider = d3
@@ -404,10 +152,10 @@ function timeHandler(allData) {
         .min(d3.min(dataTime))
         .max(d3.max(dataTime))
         .step(1000 * 60 * 60 * 24 * 365)
-        .width(800)
+        .width(sliderWidth)
         .tickFormat(d3.timeFormat("%Y"))
         .tickValues(dataTime)
-        .default(new Date(2007, 10, 3))
+        .default(new Date(2011, 10, 3))
         .on("onchange", (val) => {
             var currYear = d3.timeFormat("%Y")(val);
 
@@ -426,7 +174,7 @@ function timeHandler(allData) {
     var gTime = d3
         .select("div#slider-time")
         .append("svg")
-        .attr("width", 900)
+        .attr("width", sliderWidth + 50)
         .attr("height", 100)
         .append("g")
         .attr("transform", "translate(30,30)");
