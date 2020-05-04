@@ -42,7 +42,6 @@ function updateRevenueGraph(allData) {
 
     // update the graph
     makeRevenueChart(data, county, year);
-    makeSpendingChart(data, county, year);
 
   })
   .catch((e) => console.log(e));

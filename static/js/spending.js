@@ -1,11 +1,11 @@
 
-var chart = document.getElementById("spending");
+
 $(document).ready(function() {
 
     var dropdown = document.getElementById("dropwdown");
 
 
-    d3.csv("http://localhost:8080/data/funding2011to2017.csv")
+    d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
         .then(jsonTuples => {
             $("#dropdown").change(function() {
 
@@ -21,14 +21,7 @@ $(document).ready(function() {
         .catch(e => console.log(e));
 })
 
-var margins = {
-    tp: 20,
-    btm: 50,
-    lft: 80,
-    rt: 30
-};
-var width = 600;
-var height = 450;
+
 
 
 
@@ -42,10 +35,19 @@ var height = 450;
       }
   }
 
-  /* formats data for chart */
 
+/* Creates chart */
 
 function makeSpendingChart(allData, county, year) {
+  var spend_chart = document.getElementById("spending");
+  var margins = {
+      tp: 20,
+      btm: 50,
+      lft: 80,
+      rt: 30
+  };
+  var width = 600;
+  var height = 450;
   var countyData = getCountySData(allData, year, county);
 
   // within county data, get data to graph
@@ -69,7 +71,7 @@ function makeSpendingChart(allData, county, year) {
   .domain(graphData.map(d => d.name))
   .range(d3.schemeCategory10);
 
-  d3.select(chart)
+  d3.select(spend_chart)
     .selectAll("rect")
     .data(graphData)
     .enter()
@@ -90,19 +92,20 @@ function makeSpendingChart(allData, county, year) {
 
 
   // X-axis
-  d3.select(chart)
-    .append("g")
-    .attr("transform", `translate(0,${height - margins.btm})`)
-    .call(d3.axisBottom(xBand));
+
+  d3.select(spend_chart)
+      .append("g")
+      .attr("transform", `translate(0,${height - margins.btm})`)
+      .call(d3.axisBottom(xBand));
 
   // Y-axis
-  d3.select(chart)
+  d3.select(spend_chart)
     .append("g")
     .attr("transform", `translate(${margins.lft}, ${margins.tp})`)
     .call(d3.axisLeft(hScale));
 
   // Y-axis label
-  d3.select(chart)
+  d3.select(spend_chart)
     .append("text")
     .attr("x", 0 - height / 2)
     .attr("y", 15)

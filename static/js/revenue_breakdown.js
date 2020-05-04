@@ -1,4 +1,4 @@
-var chart = document.getElementById("revenue-breakdown");
+
 $(document).ready(function() {
 
     var dropdown = document.getElementById("dropwdown");
@@ -20,14 +20,7 @@ $(document).ready(function() {
         .catch(e => console.log(e));
 })
 
-var margins = {
-    tp: 20,
-    btm: 50,
-    lft: 80,
-    rt: 30
-};
-var width = 350;
-var height = 450;
+
 
 
 
@@ -46,14 +39,24 @@ var height = 450;
 
 
 function makeRevenueChart(allData, county, year) {
-  console.log("You called me");
+  var chart = document.getElementById("revenue-breakdown");
+
+
+  var margins = {
+      tp: 20,
+      btm: 50,
+      lft: 80,
+      rt: 30
+  };
+  var width = 350;
+  var height = 450;
   $("#revenue-breakdown").empty();
   var countyData = getCountyData(allData, year, county);
   //console.log(countyData);
   // within county data, get data to graph
   var graphData = isolateData(countyData);
 
-  
+
   var revenue = ["Total", "Federal", "State", "Local"];
   //red, beige, grey, yellow, black,
   var color_range = ["#cf3502", "#fcf6dc", "#b3b3b3", "#f2ca18", "#0d0607"];
