@@ -13,7 +13,7 @@ $(document).ready(function() {
                 createOverviewChart(data, selectedCounty, 2011);
             })
 
-        
+
         })
         .catch(e => console.log(e));
 })
@@ -36,11 +36,11 @@ function createOverviewChart(data, county, currYear) {
     data.sort(function(b, a) {
         return a.PPCSTOT - b.PPCSTOT;
     });
-    data = data.filter(function(d) { 
-        return d.Year == currYear 
+    data = data.filter(function(d) {
+        return d.Year == currYear
     });
-   
-      
+
+
     // append the svg object to the body of the page
     var svgChart = d3.select(chart)
         .append("svg")
@@ -82,7 +82,7 @@ function createOverviewChart(data, county, currYear) {
         .attr('y', -currmargin.left / 2)
         .attr('transform', 'rotate(-90)')
         .attr('text-anchor', 'middle')
-        .text('Total Funding ($)')
+        .text('Funding per student($)')
 
     // Bars
     svgChart.selectAll("bars")
@@ -120,7 +120,7 @@ function createOverviewChart(data, county, currYear) {
             })
         .on('mouseleave', function() {
             svgChart.select("#line-limit").remove()
-            
+
         })
 
 
