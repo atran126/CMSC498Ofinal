@@ -83,6 +83,7 @@ d3.select(chart)
       .attr("width", xBand.bandwidth())
       .append("svg:title")
 
+      // Add correct hover over text
     .text(function(d) {
       var val = d[1] - d[0];
       if (d.data.cat1 == val) {
