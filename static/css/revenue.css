@@ -7,5 +7,5 @@ a, p {
   font-size: 16px;
 }
 #revenue-breakdown {
-  transform: translate(50px,50px)
+  transform: translate(0,50px)
 }

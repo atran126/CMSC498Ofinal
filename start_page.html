@@ -49,7 +49,7 @@
         </div>
         <hr>
         <div class="row">
-            <div class ="col-sm-7">
+            <div class ="col-sm-8">
                 <div id="menu">
                     <!-- <span class="h3">Metric</span>
                     <hr> -->
@@ -97,7 +97,7 @@
                     <hr> -->
                 </div>
 
-                <div id="map"></div>
+                <div id="map" class="col-sm-8"></div>
                 <div id="legend"></div>
                 <div class="row">
                     <svg id="funding-overview" width="750" height="300"></svg>
@@ -105,28 +105,25 @@
             </div>
             
             
-            <div class ="col-sm-5">
-                
-                <div id = "text-box">
-                    <h1> County Name</h1>
-                    <ul>
-                        <li> Total state funding:</li>
-                        <li> Average School Rating:</li>
-                        <li> Median List Price</li>
-                    </ul>
-                </div>
-
-                
+            <div class ="col-sm-4">
                     <div id= "slider">
                         <p id="time-label" year="2017">Select Year</p>
-                        <div year="2011" data-year="2005" id="time-div" class="row align-items-center">
+                        <div year="2017" data-year="2017" id="time-div" class="row align-items-center">
                             <div class="col-sm-2"><p id="value-time"></p></div>
                             <div class="col-sm"><div id="slider-time"></div></div>
                         </div>
                     </div>
 
+                    <div id = "text-box">
+                        <h2 id = "county-title"></h1>
+                        
+                        <h5 id = "total-county-funding-title"> </li>
+                        <!-- <li id = "school-rating-title"> </li> -->
+                        <!-- <li id = "price-title"> </li> -->
+                        
+                    </div>
                     <div>
-                        <svg id="revenue-breakdown" width="350" height="400"></svg>
+                        <svg id="revenue-breakdown" width="350" height="450"></svg>
                     </div>     
                 
             </div>
@@ -146,6 +143,7 @@
     <script src="./static/js/map.js"></script>
     <script src="./static/js/fundingOverview.js"></script>
     <script src="./static/js/revenue_breakdown.js"></script>
+    <script src="./static/js/textbox.js"></script>
     <script src="./static/js/slider.js"></script>
 </body>
 

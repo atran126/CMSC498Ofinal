@@ -24,7 +24,7 @@ var margins = {
     rt: 30
 };
 var width = 350;
-var height = 300;
+var height = 450;
 
 
 function createChart(jsonTuples, county, chart) {

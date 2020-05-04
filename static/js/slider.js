@@ -155,7 +155,7 @@ function timeHandler(allData) {
         .width(sliderWidth)
         .tickFormat(d3.timeFormat("%Y"))
         .tickValues(dataTime)
-        .default(new Date(2011, 10, 3))
+        .default(new Date(2017, 10, 3))
         .on("onchange", (val) => {
             var currYear = d3.timeFormat("%Y")(val);
 
