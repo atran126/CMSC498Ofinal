@@ -6,7 +6,7 @@ d3.json("http://localhost:8080/../../data/yeardata.json")
     })
     .catch((e) => console.log(e));
 
-function updateFundingOverviewGraph() {
+function updateGraphs() {
   d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
   .then((data) => {
     console.log("slider > funding overview update");
@@ -16,6 +16,8 @@ function updateFundingOverviewGraph() {
 
     // update the graph
     createOverviewChart(data, county, year);
+    makeSpendingChart(data, county, year);
+    makeRevenueChart(data, county, year);
   })
   .catch((e) => console.log(e));
 
@@ -28,45 +30,6 @@ function getYearData(allData, year) {
         }
     }
 }
-
-// when the time slider changes, need to update each graph accordingly
-function updateRevenueGraph(allData) {
-
-
-
-  d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
-  .then((data) => {
-
-    var year = document.getElementById("time-div").getAttribute("year");
-    var county = document.getElementById("dropdown").getAttribute("county");
-
-    // update the graph
-    makeRevenueChart(data, county, year);
-
-  })
-  .catch((e) => console.log(e));
-
-}
-
-function updateSpendingGraph(allData) {
-
-
-
-  d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
-  .then((data) => {
-
-    var year = document.getElementById("time-div").getAttribute("year");
-    var county = document.getElementById("dropdown").getAttribute("county");
-
-    // update the graph
-    makeSpendingChart(data, county, year);
-
-  })
-  .catch((e) => console.log(e));
-
-}
-
-
 
 function timeHandler(allData) {
     var dataTime = d3.range(0, 7).map(function(d) {
@@ -86,16 +49,10 @@ function timeHandler(allData) {
             var currYear = d3.timeFormat("%Y")(val);
 
             // updates year attribute in HTML div
-            document.getElementById("time-div").setAttribute("year", currYear);
-            // $("#time-div").data("year", currYear);
-
-            // document.getElementById("time-label").setAttribute("year", currYear);
+            document.getElementById("time-div").setAttribute("year", currYear);    
             d3.select("p#time-label").text(currYear);
-
             //  update graphs here
-            updateRevenueGraph(allData);
-            updateSpendingGraph(allData);
-            updateFundingOverviewGraph(allData);
+            updateGraphs(allData);
         });
 
     var gTime = d3
