@@ -1,4 +1,11 @@
-var legend;
+// 2011 to 2017
+// data before 2015 not available, show disclaimer and remove others!!!!
+// send simin years not available
+// add map function to slider
+// make map clickable!!!!!
+// finish cde by saturday
+
+var legend, paths;
 var bgColor = "#eee";
 var width = 650;
 var height = 450;
@@ -14,28 +21,16 @@ var path = d3.geoPath()
 
 var categories = {
     median_price: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
-    median_list_price_district: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
-    median_list_price_county: ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"],
-    days_on_market_county: ["No Data", "0-50", "50-100", ">100"],
-    days_on_market_district: ["No Data", "0-50", "50-100", ">100"],
     avg_school_rating: ["No Data", "1-3", "3-5", "5-7", "7-10"]
 }
 
 var colors = {
     median_price: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
-    median_list_price_district: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
-    median_list_price_county: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
-    days_on_market_county: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
-    days_on_market_district: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"],
     avg_school_rating: ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"]
 }
 
 var green = {
     median_price: getScale("median_price"),
-    median_list_price_district: getScale("median_list_price_district"),
-    median_list_price_county: getScale("median_list_price_county"),
-    days_on_market_county: getScale("days_on_market_county"),
-    days_on_market_district: getScale("days_on_market_district"),
     avg_school_rating: getScale("avg_school_rating")
 }
 
@@ -47,7 +42,6 @@ var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
 });
-
 
 
 //Create SVG element and append map to the SVG
@@ -75,12 +69,11 @@ function zoomed() {
 // get the right data, wrt user preferences
 var formData = getFormData();
 
-
 // draw the map
 d3.json("http://localhost:8080/data/md-counties.json")
     .then(geo_json => {
         // Bind the data to the SVG and create one path per GeoJSON feature
-        var paths = svg.selectAll("path")
+        paths = svg.selectAll("path")
             .data(geo_json.features)
             .enter()
             .append("path")
@@ -91,24 +84,19 @@ d3.json("http://localhost:8080/data/md-counties.json")
 
         d3.json("http://localhost:8080/data/house_prices_historical.json")
             .then(map_data => {
-                $("#dropdown").change(dropdownChange);
-                $("input").click(updateMap);
-                $("input").click(updateLegend);
-                $("#time-div").change(updateMap)
-                // .change(updateLegend);
-                // d3.select("#dropdown").on("change", zoomMap)
-
-                tooltips();
-
                 // map realtor data to make it easier to access
                 map_data = d3.nest()
                     .key(item => item.year)
                     .key(item => item.county)
                     .object(map_data);
 
-                function getYear() {
-                    return $("#time-label").attr("year");
-                }
+                $("#dropdown").change(dropdownChange);
+                $("input").click(updateMap(map_data, getYear()));
+                $("input").click(updateLegend);
+                $("path").click(mapClicked);
+                // paths.on("click", updateMap(map_data, getYear()));
+
+
 
                 // fill in colors
                 paths.style("fill", d => {
@@ -126,56 +114,7 @@ d3.json("http://localhost:8080/data/md-counties.json")
                 })
 
                 updateLegend();
-                tooltips();
-
-                // Modification of custom tooltip code provided by Malcolm Maclean, "D3 Tips and Tricks"
-                // http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
-                function tooltips() {
-                    paths.on("mouseover", function(d) {
-                            $(".tooltip").empty();
-                            var year = getYear();
-                            var county = d.properties["NAME"];
-
-                            if (map_data[year][county] != undefined) {
-                                var num = map_data[year][county][0][formData];
-                                div.transition()
-                                    .duration(200)
-                                    .style("opacity", .9);
-
-                                $(".tooltip").append(county)
-                                    .append("<hr>")
-                                    .append(num)
-                                    .css("left", (d3.event.pageX) + "px")
-                                    .css("top", (d3.event.pageY - 28) + "px")
-                            }
-                        })
-                        // fade out tooltip on mouse out
-                        .on("mouseout", function(d) {
-                            div.transition()
-                                .duration(500)
-                                .style("opacity", 0);
-                        });
-                }
-
-
-
-                // update map colors with new selections
-                function updateMap() {
-                    formData = getFormData();
-                    paths.transition()
-                        .duration(500)
-                        .style("fill", d => {
-                            var county = d.properties["NAME"];
-                            var year = getYear();
-                            var n = "#eee";
-                            if (map_data[year][county] != undefined) {
-                                n = map_data[year][county][0][formData];
-                                n = getCategory(n);
-                                n = colors[formData][n];
-                            }
-                            return n
-                        });
-                }
+                tooltips(map_data);
 
                 function zoomMap(d) {
                     console.log(d);
@@ -203,8 +142,6 @@ d3.json("http://localhost:8080/data/md-counties.json")
                 }
             });
     });
-
-$("input").click(updateLegend);
 
 // Modified Legend Code from Mike Bostock: http://bl.ocks.org/mbostock/3888852
 function updateLegend() {
@@ -236,11 +173,122 @@ function updateLegend() {
         });
 }
 
-function dropdownChange() {
+function mapClicked() {
     $(".currentCounty").removeClass("currentCounty");
-    var county = $(this).val();
-    var i = -1;
+    var county = $(this).attr("id");
+    $("#" + county).addClass("currentCounty");
 
+    switch (county) {
+        case "Allegany":
+            county = "ALLEGANY COUNTY PUBLIC SCHOOLS";
+            i = 0;
+            break;
+        case "AnneArundel":
+            county = "ANNE ARUNDEL CO SCHS";
+            i = 1;
+            break;
+        case "Charles":
+            county = "CHARLES CO SCHS";
+            i = 2;
+            break;
+        case "Dorchester":
+            county = "DORCHESTER CO SCHS";
+            i = 3;
+            break;
+        case "Howard":
+            county = "HOWARD COUNTY SCHOOLS";
+            i = 4;
+            break;
+        case "Kent":
+            county = "KENT COUNTY SCHOOLS";
+            i = 5;
+            break;
+        case "QueenAnnes":
+            county = "QUEEN ANNES COUNTY SCHOOLS";
+            i = 6;
+            break;
+        case "StMarys":
+            county = "ST MARYS CO SCHS";
+            i = 7;
+            break;
+        case "Talbot":
+            county = "TALBOT CO SCHS";
+            i = 8;
+            break;
+        case "Washington":
+            county = "WASHINGTON CO SCHS";
+            i = 9;
+            break;
+        case "Baltimore":
+            county = "BALTIMORE COUNTY SCHOOLS";
+            i = 10;
+            break;
+        case "Calvert":
+            county = "CALVERT CO SCHS";
+            i = 11;
+            break;
+        case "Caroline":
+            county = "CAROLINE CO SCHS";
+            i = 12;
+            break;
+        case "Carroll":
+            county = "CARROLL CO SCHS";
+            i = 13;
+            break;
+        case "Cecil":
+            county = "CECIL COUNTY PUBLIC SCHOOLS";
+            i = 14;
+            break;
+        case "Frederick":
+            county = "FREDERICK CO SCHOOLS";
+            i = 15;
+            break;
+        case "Garrett":
+            county = "GARRETT COUNTY SCHOOLS";
+            i = 16;
+            break;
+        case "Harford":
+            county = "HARFORD CO SCH";
+            i = 17;
+            break;
+        case "Montgomery":
+            county = "MONTGOMERY COUNTY SCHOOLS";
+            i = 18;
+            break;
+        case "PrinceGeorges":
+            county = "PRINCE GEORGES CO SCHS";
+            i = 19;
+            break;
+        case "Wicomico":
+            county = "WICOMICO CO SCHOOLS";
+            i = 20;
+            break;
+        case "Worcester":
+            county = "WORCESTER CO BOARD OF EDUCATION";
+            i = 21;
+            break;
+        case "BaltimoreCity":
+            county = "BALTIMORE CITY SCHOOLS";
+            i = 22;
+            break;
+        case "Somerset":
+            county = "SOMERSET CO SCHS";
+            i = 23;
+            break;
+        default:
+            county = "";
+            i = -1;
+            break;
+    }
+
+
+    $("select").val(county).trigger("change");
+}
+
+function dropdownChange() {
+    var county = $(this).val();
+    $(".currentCounty").removeClass("currentCounty");
+    var i = -1;
     switch (county) {
         case "ALLEGANY COUNTY PUBLIC SCHOOLS":
             county = "#Allegany";
@@ -342,30 +390,32 @@ function dropdownChange() {
             county = "";
             i = -1;
             break;
-
     }
-    // var c = geo_json.features[i];
-    // console.log(c);
     $(county).addClass("currentCounty");
+}
 
 
-    // var bounds = path.bounds(c),
-    //     dx = bounds[1][0] - bounds[0][0],
-    //     dy = bounds[1][1] - bounds[0][1],
-    //     x = (bounds[0][0] + bounds[1][0]) / 2,
-    //     y = (bounds[0][1] + bounds[1][1]) / 2,
-    //     scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
-    //     translate = [width / 2 - scale * x, height / 2 - scale * y];
-    //
-    // svg.transition()
-    //     .duration(750)
-    //     // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
-    //     .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)); // updated for d3 v4
-    //
-    //
-    // console.log("CHANGED: " + county);
-    // console.log(bounds);
+// update map colors with new selections
+function updateMap(data, year) {
+    formData = getFormData();
+    paths.transition()
+        .duration(500)
+        .style("fill", d => {
+            var county = d.properties["NAME"];
+            // var year = getYear();
+            var n = "#eee";
 
+            // no data, should we get find some?
+            if (!data[year][county]) {
+                return "#eee";
+            } else {
+                var n = data[year][county][0][formData];
+                n = getCategory(n);
+                return colors[formData][n]
+            }
+
+            return n
+        });
 }
 
 // returns true if the data value is numeric
@@ -415,7 +465,40 @@ function getCategory(num) {
     }
 }
 
+// Modification of custom tooltip code provided by Malcolm Maclean, "D3 Tips and Tricks"
+// http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
+function tooltips(map_data) {
+    paths.on("mouseover", function(d) {
+            $(".tooltip").empty();
+            var year = getYear();
+            var county = d.properties["NAME"];
+
+            if (map_data[year][county] != undefined) {
+                var num = map_data[year][county][0][formData];
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+
+                $(".tooltip").append(county)
+                    .append("<hr>")
+                    .append(num)
+                    .css("left", (d3.event.pageX) + "px")
+                    .css("top", (d3.event.pageY - 28) + "px")
+            }
+        })
+        // fade out tooltip on mouse out
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+}
+
 function getFormData() {
     var form_data = $("#form").serializeArray();
     return !form_data.length == 0 ? form_data[0].value : "";
+}
+
+function getYear() {
+    return $("#time-label").attr("year");
 }
