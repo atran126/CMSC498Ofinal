@@ -41,6 +41,7 @@ function getScale(metric) {
 var formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
+    maximumSignificantDigits: 6
 });
 
 
@@ -55,16 +56,6 @@ var div = d3.select("body")
     .append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
-
-const zoom = d3.zoom().on("zoom", zoomed);
-
-function zoomed() {
-    console.log("zoomed");
-    console.log(event);
-    // svg.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-    // g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"); // not in d3 v4
-    svg.attr("transform", 50); // updated for d3 v4
-}
 
 // get the right data, wrt user preferences
 var formData = getFormData();
@@ -94,9 +85,32 @@ d3.json("http://localhost:8080/data/md-counties.json")
                 $("input").click(updateMap(map_data, getYear()));
                 $("input").click(updateLegend);
                 $("path").click(mapClicked);
-                // paths.on("click", updateMap(map_data, getYear()));
+                paths.on("mouseover", function(d) {
+                        $(".tooltip").empty();
+                        var year = getYear();
+                        console.log(year);
+                        var county = d.properties["NAME"];
 
+                        if (map_data[year][county] != undefined) {
+                            var num = map_data[year][county][0][formData];
+                            num = getNum(num);
+                            num = formatter.format(num);
+                            div.transition()
+                                .duration(200)
+                                .style("opacity", .9);
 
+                            $(".tooltip").append(county)
+                                .append("<hr>")
+                                .append(num)
+                                .css("left", (d3.event.pageX) + "px")
+                                .css("top", (d3.event.pageY - 28) + "px")
+                        }
+                    })
+                    .on("mouseout", function(d) {
+                        div.transition()
+                            .duration(500)
+                            .style("opacity", 0);
+                    });
 
                 // fill in colors
                 paths.style("fill", d => {
@@ -114,32 +128,7 @@ d3.json("http://localhost:8080/data/md-counties.json")
                 })
 
                 updateLegend();
-                tooltips(map_data);
-
-                function zoomMap(d) {
-                    console.log(d);
-                    const [
-                        [x0, y0],
-                        [x1, y1]
-                    ] = path.bounds(d);
-                    d3.event.stopPropagation();
-                    svg.transition().duration(750).call(
-                        zoom.transform,
-                        d3.zoomIdentity
-                        .translate(width / 2, height / 2)
-                        .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
-                        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-                        d3.mouse(svg.node())
-                    );
-                }
-
-                function zoomed() {
-                    const {
-                        transform
-                    } = d3.event;
-                    g.attr("transform", transform);
-                    g.attr("stroke-width", 1 / transform.k);
-                }
+                $("select").val(defaultCounty).trigger("change");
             });
     });
 
@@ -171,6 +160,94 @@ function updateLegend() {
         .text(function(d) {
             return d;
         });
+}
+
+
+// update map colors with new selections
+function updateMap(data, year) {
+    formData = getFormData();
+    paths.transition()
+        .duration(500)
+        .style("fill", d => {
+            var county = d.properties["NAME"];
+            // var year = getYear();
+            var n = "#eee";
+
+            // no data, should we get find some?
+            if (!data[year][county]) {
+                return "#eee";
+            } else {
+                var n = data[year][county][0][formData];
+                n = getCategory(n);
+                return colors[formData][n]
+            }
+
+            return n
+        });
+}
+
+// returns true if the data value is numeric
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function getCategory(num) {
+    if (!num) {
+        return;
+    }
+    num = getNum(num);
+    if (formData === "median_price" || formData === "median_list_price_county" || formData === "median_list_price_district") {
+        if (!isNumeric(num)) {
+            return 0;
+        } else if (num < 200000) {
+            return 1;
+        } else if (num < 300000) {
+            return 2;
+        } else if (num < 400000) {
+            return 3;
+        } else {
+            return 4;
+        }
+    } else if (formData === "days_on_market_county" || formData === "days_on_market_district") {
+        if (!isNumeric(num)) {
+            return 0;
+        } else if (num < 50) {
+            return 1;
+        } else if (num < 100) {
+            return 2;
+        } else {
+            return 3;
+        }
+    } else if (formData === "avg_school_rating") {
+        if (!isNumeric(num)) {
+            return 0;
+        } else if (num < 3) {
+            return 1;
+        } else if (num < 5) {
+            return 2;
+        } else if (num < 7) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+}
+
+function getNum(num) {
+    if (num.charAt(0) === "$") {
+        num = num.substring(1, num.length);
+    }
+    return parseFloat(num.replace(/,/g, ""));
+}
+
+function getFormData() {
+    return "median_price";
+    // var form_data = $("#form").serializeArray();
+    // return !form_data.length == 0 ? form_data[0].value : "";
+}
+
+function getYear() {
+    return $("#time-div").attr("year");
 }
 
 function mapClicked() {
@@ -392,113 +469,4 @@ function dropdownChange() {
             break;
     }
     $(county).addClass("currentCounty");
-}
-
-
-// update map colors with new selections
-function updateMap(data, year) {
-    formData = getFormData();
-    paths.transition()
-        .duration(500)
-        .style("fill", d => {
-            var county = d.properties["NAME"];
-            // var year = getYear();
-            var n = "#eee";
-
-            // no data, should we get find some?
-            if (!data[year][county]) {
-                return "#eee";
-            } else {
-                var n = data[year][county][0][formData];
-                n = getCategory(n);
-                return colors[formData][n]
-            }
-
-            return n
-        });
-}
-
-// returns true if the data value is numeric
-function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-function getCategory(num) {
-    if (!num) {
-        return;
-    }
-    num = parseInt(num.replace(/\W+/g, ""));
-    if (formData === "median_price" || formData === "median_list_price_county" || formData === "median_list_price_district") {
-        if (!isNumeric(num)) {
-            return 0;
-        } else if (num < 200000) {
-            return 1;
-        } else if (num < 300000) {
-            return 2;
-        } else if (num < 400000) {
-            return 3;
-        } else {
-            return 4;
-        }
-    } else if (formData === "days_on_market_county" || formData === "days_on_market_district") {
-        if (!isNumeric(num)) {
-            return 0;
-        } else if (num < 50) {
-            return 1;
-        } else if (num < 100) {
-            return 2;
-        } else {
-            return 3;
-        }
-    } else if (formData === "avg_school_rating") {
-        if (!isNumeric(num)) {
-            return 0;
-        } else if (num < 3) {
-            return 1;
-        } else if (num < 5) {
-            return 2;
-        } else if (num < 7) {
-            return 3;
-        } else {
-            return 4;
-        }
-    }
-}
-
-// Modification of custom tooltip code provided by Malcolm Maclean, "D3 Tips and Tricks"
-// http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html
-function tooltips(map_data) {
-    paths.on("mouseover", function(d) {
-            $(".tooltip").empty();
-            var year = getYear();
-            var county = d.properties["NAME"];
-
-            if (map_data[year][county] != undefined) {
-                var num = map_data[year][county][0][formData];
-                div.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-
-                $(".tooltip").append(county)
-                    .append("<hr>")
-                    .append(num)
-                    .css("left", (d3.event.pageX) + "px")
-                    .css("top", (d3.event.pageY - 28) + "px")
-            }
-        })
-        // fade out tooltip on mouse out
-        .on("mouseout", function(d) {
-            div.transition()
-                .duration(500)
-                .style("opacity", 0);
-        });
-}
-
-function getFormData() {
-    var form_data = $("#form").serializeArray();
-    return !form_data.length == 0 ? form_data[0].value : "";
-}
-
-function getYear() {
-    return $("#time-label").attr("year");
 }
