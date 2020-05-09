@@ -1,10 +1,3 @@
-// 2011 to 2017
-// data before 2015 not available, show disclaimer and remove others!!!!
-// send simin years not available
-// add map function to slider
-// make map clickable!!!!!
-// finish cde by saturday
-
 var legend, paths;
 var bgColor = "#eee";
 var width = 650;
@@ -364,7 +357,7 @@ function mapClicked() {
 
 function dropdownChange() {
     var county = $(this).val();
-    
+
     $(".currentCounty").removeClass("currentCounty");
     var i = -1;
     switch (county) {
@@ -472,6 +465,6 @@ function dropdownChange() {
     $(county).addClass("currentCounty");
 }
 
-function updatePriceText(medianListPrice){
+function updatePriceText(medianListPrice) {
     document.getElementById("price-title").innerHTML = "Median List Price: $" + medianListPrice;
 }
