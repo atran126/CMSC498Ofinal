@@ -6,6 +6,10 @@
 #funding-overview {
   transform: translate(-50px,-150px)
 }
+
+#small-charts {
+  transform: translate(0,-50px)
+}
 /* #slider {
   transform: translate(50px,0)
 } */

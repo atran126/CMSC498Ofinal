@@ -16,7 +16,7 @@
 
 <body>
     <div class="container">
-        <h1>Visualizing School Funding & Housing Prices</h1>
+        <h2>Visualizing School Funding & Housing Prices</h2>
         <p></p>
         <div id="dropdown-cont">
             <select county="default" id="dropdown">
@@ -93,28 +93,29 @@
                     </div>
 
                     <div id = "text-box">
-                        <h2 id = "county-title"></h1>
-
-                        <h5 id = "total-county-funding-title"> </li>
-                        <!-- <li id = "school-rating-title"> </li> -->
-                        <!-- <li id = "price-title"> </li> -->
+                        <h4 id = "county-title"></h1>
+                        
+                        <h6 id = "funding-title"> </h6>
+                        <h6 id = "spending-title"> </h6>
+                        <h6 id = "price-title"> </h6>
 
                     </div>
-                    <div>
-                        <svg id="revenue-breakdown" width="350" height="450"></svg>
+                    <div id="small-charts">
+                        <svg id="revenue-breakdown" width="400" height="275"></svg>
+                        <svg id="spending" width="400" height="500"></svg>
                     </div>
 
             </div>
 
-            <svg id="spending" width="600" height="450"></svg>
+            
 
         </div>
    </div>
     <script src="./static/js/map.js"></script>
+    <script src="./static/js/textbox.js"></script>
     <script src="./static/js/fundingOverview.js"></script>
     <script src="./static/js/revenue_breakdown.js"></script>
     <script src="./static/js/spending.js"></script>
-    <script src="./static/js/textbox.js"></script>
     <script src="./static/js/slider.js"></script>
 </body>
 

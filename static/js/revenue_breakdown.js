@@ -40,21 +40,20 @@ function makeRevenueChart(allData, county, year) {
         rt: 30
     };
     var width = 350;
-    var height = 450;
+    var height = 250;
     $("#revenue-breakdown").empty();
     var countyData = getCountyData(allData, year, county);
     // console.log(countyData);
     // within county data, get data to graph
     var graphData = isolateData(countyData);
 
-
+    updateFundingText(countyData.TOTALREV);
     var revenue = ["Total", "Federal", "State", "Local"];
     //red, beige, grey, yellow, black,
     var color_range = ["#cf3502", "#fcf6dc", "#b3b3b3", "#f2ca18", "#0d0607"];
     var keys = ["cat1", "cat2", "cat3", "cat4"];
 
     // xBand
-    var xBand = d3
     var xBand = d3.scaleBand()
         .domain(revenue)
         .range([margins.lft, width - margins.rt])
@@ -279,4 +278,8 @@ function isolateData(countyData) {
     return obj;
 
 
+}
+
+function updateFundingText(value){
+    document.getElementById("funding-title").innerHTML = "Total County Funding: $" + numberWithCommas(parseInt(value));
 }

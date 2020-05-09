@@ -73,7 +73,7 @@ d3.json("http://localhost:8080/data/md-counties.json")
             .style("stroke", "#fff")
             .style("stroke-width", "1");
 
-        d3.json("http://localhost:8080/data/house_prices_historical.json")
+        d3.json("http://localhost:8080/data/houseprices-prettynames.json")
             .then(map_data => {
                 // map realtor data to make it easier to access
                 map_data = d3.nest()
@@ -364,6 +364,7 @@ function mapClicked() {
 
 function dropdownChange() {
     var county = $(this).val();
+    
     $(".currentCounty").removeClass("currentCounty");
     var i = -1;
     switch (county) {
@@ -469,4 +470,8 @@ function dropdownChange() {
             break;
     }
     $(county).addClass("currentCounty");
+}
+
+function updatePriceText(medianListPrice){
+    document.getElementById("price-title").innerHTML = "Median List Price: $" + medianListPrice;
 }

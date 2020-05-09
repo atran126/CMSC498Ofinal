@@ -46,10 +46,10 @@ function makeSpendingChart(allData, county, year) {
         lft: 80,
         rt: 30
     };
-    var width = 600;
-    var height = 450;
+    var width = 400;
+    var height = 250;
     var countyData = getCountySData(allData, year, county);
-
+    updateSpendingText(countyData.TOTALEXP);
     // within county data, get data to graph
     var graphData = isolateSData(countyData);
 
@@ -66,7 +66,7 @@ function makeSpendingChart(allData, county, year) {
         .domain([1, graphData[0].value])
         .range([height - margins.btm - margins.tp, 0]);
 
-    // Color scale
+        
     var color = d3.scaleOrdinal()
         .domain(graphData.map(d => d.name))
         .range(d3.schemeCategory10);
@@ -82,6 +82,7 @@ function makeSpendingChart(allData, county, year) {
         .attr("height", d => (height - margins.tp - margins.btm - hScale(d.value)))
         .attr("fill", (d) => color(d.name))
         .append("svg:title")
+        
 
         // Add correct hover over text
         .text(function(d) {
@@ -96,7 +97,10 @@ function makeSpendingChart(allData, county, year) {
     d3.select(spend_chart)
         .append("g")
         .attr("transform", `translate(0,${height - margins.btm})`)
-        .call(d3.axisBottom(xBand));
+        .call(d3.axisBottom(xBand))
+        // .attr(  "dy", ".35em")
+        // .attr("transform", "rotate(90)")
+        .style("text-anchor", "end");
 
     // Y-axis
     d3.select(spend_chart)
@@ -149,4 +153,8 @@ function isolateSData(countyData) {
 
 
 
+}
+
+function updateSpendingText(value){
+    document.getElementById("spending-title").innerHTML = "Total County Expenditures: $" + numberWithCommas(parseInt(value));
 }

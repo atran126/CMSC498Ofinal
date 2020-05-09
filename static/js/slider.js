@@ -18,7 +18,7 @@ function updateGraphs() {
             var county = document.getElementById("dropdown").getAttribute("county");
 
             // update map
-            d3.json("http://localhost:8080/../../data/house_prices_historical.json")
+            d3.json("http://localhost:8080/../../data/houseprices-prettynames.json")
                 .then((mapdata) => {
                     mapdata = d3.nest()
                         .key(item => item.year)
@@ -32,7 +32,7 @@ function updateGraphs() {
             createOverviewChart(data, county, year);
             makeSpendingChart(data, county, year);
             makeRevenueChart(data, county, year);
-
+            updatePriceText(county, year);
 
         })
         .catch((e) => console.log(e));
