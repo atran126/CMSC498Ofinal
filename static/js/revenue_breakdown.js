@@ -281,5 +281,5 @@ function isolateData(countyData) {
 }
 
 function updateFundingText(value){
-    document.getElementById("funding-title").innerHTML = "Total County Funding: $" + numberWithCommas(parseInt(value));
+    document.getElementById("funding-title").innerHTML = "Total County Revenue: $" + numberWithCommas(parseInt(value));
 }
