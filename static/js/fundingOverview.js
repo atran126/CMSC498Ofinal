@@ -125,7 +125,3 @@ function createOverviewChart(data, county, currYear) {
 
 
 };
-function updateFundingText(value){
-    document.getElementById("funding-title").innerHTML = "Total County Revenue: $" + value;
-   
-}

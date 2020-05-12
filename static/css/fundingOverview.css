@@ -6,7 +6,9 @@
 #funding-overview {
   transform: translate(-50px,-150px)
 }
-
+#per-pupil-title{
+  transform: translate(50px,-150px)
+}
 #small-charts {
   transform: translate(0,-50px)
 }
