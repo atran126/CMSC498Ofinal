@@ -3,7 +3,7 @@
 var county = $("#dropdown").val();
 console.log(width);
 $(document).ready(function() {
-    d3.csv("http://localhost:8080/data/funding2011to2017.csv")
+    d3.csv("http://localhost:8080/data/new_school_data.csv")
         .then(data => {
 
             $("#dropdown").change(function() {

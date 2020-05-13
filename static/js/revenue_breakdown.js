@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // var dropdown = document.getElementById("dropwdown");
-    d3.csv("http://localhost:8080/data/funding2011to2017.csv")
+    d3.csv("http://localhost:8080/data/new_school_data.csv")
         .then(jsonTuples => {
             makeRevenueChart(jsonTuples, defaultCounty, defaultYear.toString());
 
@@ -33,21 +33,85 @@ function getCountyData(allData, year, county) {
 function makeRevenueChart(allData, county, year) {
     var chart = document.getElementById("revenue-breakdown");
 
+
     var margins = {
         tp: 20,
         btm: 50,
-        lft: 80,
+        lft: 100,
         rt: 30
     };
     var width = 350;
     var height = 250;
     $("#revenue-breakdown").empty();
+
     var countyData = getCountyData(allData, year, county);
     // console.log(countyData);
     // within county data, get data to graph
     var graphData = isolateData(countyData);
     updateFundingText(countyData.TOTALREV);
     updatePerPupilText(numberWithCommas(countyData.PPCSTOT));
+
+    var xBand = d3.scaleBand()
+        .domain(graphData.map(d => d.name))
+        .range([margins.lft, width - margins.rt])
+        .paddingInner(0.1);
+
+    // Height scale function
+    var hScale = d3.scaleLinear()
+        .domain([1, graphData[0].value])
+        .range([height - margins.btm - margins.tp, 0]);
+
+
+    var color = d3.scaleOrdinal()
+        .domain(graphData.map(d => d.name))
+        .range(d3.schemeCategory10);
+
+    d3.select(chart)
+        .selectAll("rect")
+        .data(graphData)
+        .enter()
+        .append("rect")
+        .attr("x", d => xBand(d.name) + "px")
+        .attr("y", d => margins.tp + hScale(d.value) + "px")
+        .attr("width", xBand.bandwidth())
+        .attr("height", d => (height - margins.tp - margins.btm - hScale(d.value)))
+        .attr("fill", (d) => color(d.name))
+        .append("svg:title")
+
+
+        // Add correct hover over text
+        .text(function(d) {
+            ret_val = d.long_name + ": " + d.value + " students";
+            return ret_val;
+
+        });
+
+
+    // X-axis
+
+    d3.select(chart)
+        .append("g")
+        .attr("transform", `translate(0,${height - margins.btm})`)
+        .call(d3.axisBottom(xBand))
+        .selectAll("text")
+        .attr("transform", "translate(0,0) rotate(-20)")
+        .style("text-anchor", "end");
+
+    // Y-axis
+    d3.select(chart)
+        .append("g")
+        .attr("transform", `translate(${margins.lft}, ${margins.tp})`)
+        .call(d3.axisLeft(hScale));
+
+    // Y-axis label
+    d3.select(chart)
+        .append("text")
+        .attr("x", 0 - height / 2)
+        .attr("y", 15)
+        .attr("transform", "rotate(-90)")
+        .style("text-anchor", "middle")
+        .text("Revenue (FY$)");
+    /*
     var revenue = ["Total", "Federal", "State", "Local"];
     //red, beige, grey, yellow, black,
     var color_range = ["#cf3502", "#fcf6dc", "#b3b3b3", "#f2ca18", "#0d0607"];
@@ -203,6 +267,7 @@ function makeRevenueChart(allData, county, year) {
         .attr("y", 9.5)
         .attr("dy", "0.32em")
         .text((d) => d);
+        */
 
 }
 
@@ -215,6 +280,24 @@ function isolateData(countyData) {
     var federal = {};
     var state = {};
     var local = {};
+    var olocal = {};
+    total.value = countyData.TOTALREV;
+    total.name = "Total";
+    total.long_name = "Total";
+    federal.value = countyData.TFEDREV;
+    federal.name = "Federal";
+    federal.long_name = "Federal";
+    state.value = countyData.TSTREV;
+    state.name = "State";
+    state.long_name = "State"
+    local.value = countyData.TLOCREV;
+    local.name = "Local";
+    local.long_name = "Local";
+    olocal.value = countyData.other_local;
+    olocal.name = "Other";
+    olocal.long_name = "Miscellaneous Local Funding";
+
+    /*
     total.value = countyData.TOTALREV;
     total.name = "Total";
     total.cat1 = 0;
@@ -270,11 +353,13 @@ function isolateData(countyData) {
     local.cat2display = "Revenue from other school systems: $" + local.cat2;
     local.cat3display = "Charges: $" + local.cat3;
     local.cat4display = "Other local revenues: $" + local.cat4;
+    */
 
     obj.push(total);
     obj.push(federal);
     obj.push(state);
     obj.push(local);
+    obj.push(olocal);
     return obj;
 
 
@@ -285,5 +370,5 @@ function updateFundingText(value){
 }
 function updatePerPupilText(value){
     document.getElementById("per-pupil-title").innerHTML = "Per Pupil Spending in County: $" + value;
-   
+
 }

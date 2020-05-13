@@ -3,7 +3,7 @@ $(document).ready(function() {
     // var dropdown = document.getElementById("dropwdown");
 
 
-    d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
+    d3.csv("http://localhost:8080/../../data/new_school_data.csv")
         .then(jsonTuples => {
             makeSpendingChart(jsonTuples, defaultCounty, defaultYear.toString());
 
@@ -49,7 +49,7 @@ function makeSpendingChart(allData, county, year) {
     var width = 400;
     var height = 250;
     var countyData = getCountySData(allData, year, county);
-    updateSpendingText(countyData.TOTALEXP);
+    updateSpendingText(countyData.enrollment);
     // within county data, get data to graph
     var graphData = isolateSData(countyData);
 
@@ -86,7 +86,7 @@ function makeSpendingChart(allData, county, year) {
 
         // Add correct hover over text
         .text(function(d) {
-            ret_val = d.name + ": $" + d.value;
+            ret_val = d.long_name + ": " + d.value + " students";
             return ret_val;
 
         });
@@ -115,7 +115,7 @@ function makeSpendingChart(allData, county, year) {
         .attr("y", 15)
         .attr("transform", "rotate(-90)")
         .style("text-anchor", "middle")
-        .text("Spending($)");
+        .text("Students");
 
 }
 
@@ -123,8 +123,31 @@ function makeSpendingChart(allData, county, year) {
 function isolateSData(countyData) {
     var obj = [];
     var total = {};
+    total.long_name = "Total Enrollment";
+    total.name = "Total";
+    total.value = countyData.enrollment;
+    var meals = {};
+    meals.long_name = "Free and Reduced Price Meals";
+    meals.name = "FARMS";
+    meals.value = countyData.farms;
+
+    var sp = {};
+    sp.long_name = "Special Education";
+    sp.name = "SPED";
+    sp.value = countyData.sped;
+
+    var lep = {};
+    lep.long_name = "Limited English Proficiency";
+    lep.name = "LEP";
+    lep.value = countyData.lep;
+    obj.push(total);
+    obj.push(meals);
+    obj.push(sp);
+    obj.push(lep);
+    /*
+    var total = {};
     total.name = "Total Expenditures";
-    total.value = countyData.TOTALEXP;
+    total.value = countyData.farms;
 
     var curr_spend = {};
     curr_spend.name = "Total Spending";
@@ -148,7 +171,7 @@ function isolateSData(countyData) {
     obj.push(support);
     obj.push(capital_outlay);
 
-
+    */
     return obj;
 
 
@@ -156,5 +179,5 @@ function isolateSData(countyData) {
 }
 
 function updateSpendingText(value) {
-    document.getElementById("spending-title").innerHTML = "Total County Expenditures: $" + numberWithCommas(parseInt(value));
+    document.getElementById("spending-title").innerHTML = "Total Students: " + numberWithCommas(parseInt(value));
 }
