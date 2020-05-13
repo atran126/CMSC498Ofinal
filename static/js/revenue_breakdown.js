@@ -61,7 +61,7 @@ function makeRevenueChart(allData, county, year) {
         .domain([1, graphData[0].value])
         .range([height - margins.btm - margins.tp, 0]);
 
-
+    var color_range = ["#cf3502",  "#f2ca18", "#0d0607", "#3b02d9", "#db6802"];
     var color = d3.scaleOrdinal()
         .domain(graphData.map(d => d.name))
         .range(d3.schemeCategory10);
@@ -75,13 +75,13 @@ function makeRevenueChart(allData, county, year) {
         .attr("y", d => margins.tp + hScale(d.value) + "px")
         .attr("width", xBand.bandwidth())
         .attr("height", d => (height - margins.tp - margins.btm - hScale(d.value)))
-        .attr("fill", (d) => color(d.name))
+        .attr("fill", (d, i) => color_range[i])
         .append("svg:title")
 
 
         // Add correct hover over text
         .text(function(d) {
-            ret_val = d.long_name + ": " + d.value + " students";
+            ret_val = d.long_name + ": $" + d.value ;
             return ret_val;
 
         });
@@ -113,8 +113,8 @@ function makeRevenueChart(allData, county, year) {
         .text("Revenue (FY$)");
     /*
     var revenue = ["Total", "Federal", "State", "Local"];
-    //red, beige, grey, yellow, black,
-    var color_range = ["#cf3502", "#fcf6dc", "#b3b3b3", "#f2ca18", "#0d0607"];
+    //red, beige, grey, yellow, black, purple
+    var color_range = ["#cf3502",  "#b3b3b3", "#f2ca18", "#0d0607", "#3b02d9", "#db6802"];
     var keys = ["cat1", "cat2", "cat3", "cat4"];
 
     // xBand
