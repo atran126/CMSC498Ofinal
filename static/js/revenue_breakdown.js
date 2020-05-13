@@ -47,7 +47,7 @@ function makeRevenueChart(allData, county, year) {
     // within county data, get data to graph
     var graphData = isolateData(countyData);
     updateFundingText(countyData.TOTALREV);
-    updatePerPupilText(numberWithCommas(countyData.PPCSTOT));
+    updatePerPupilText(numberWithCommas(countyData.PPCSTOT), county);
     var revenue = ["Total", "Federal", "State", "Local"];
     //red, beige, grey, yellow, black,
     var color_range = ["#cf3502", "#fcf6dc", "#b3b3b3", "#f2ca18", "#0d0607"];
@@ -283,7 +283,7 @@ function isolateData(countyData) {
 function updateFundingText(value){
     document.getElementById("funding-title").innerHTML = "Total County Revenue: $" + numberWithCommas(parseInt(value));
 }
-function updatePerPupilText(value){
-    document.getElementById("per-pupil-title").innerHTML = "Per Pupil Spending in County: $" + value;
+function updatePerPupilText(value, county){
+    document.getElementById("per-pupil-title").innerHTML = "  (" +  getPrettyName(county) + ": $" + value + ")";
    
 }

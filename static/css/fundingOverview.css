@@ -3,19 +3,10 @@
   stroke-width: 3;
   stroke-dasharray: 3 6;
 }
-#funding-overview {
-  transform: translate(-50px,-150px)
+#overview-container{
+ transform: translate(0,-150px)
 }
-#per-pupil-title{
-  transform: translate(50px,-150px)
-}
+
 #small-charts {
   transform: translate(0,-50px)
 }
-/* #slider {
-  transform: translate(50px,0)
-} */
-/* #text-box {
-  padding-top: 100px;
-  transform: translate(55px,0)
-} */

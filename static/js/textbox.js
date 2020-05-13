@@ -14,50 +14,6 @@ $(document).ready(function() {
 
 });
 
-// function updatePriceText(county, year){
-//     d3.json("http://localhost:8080/data/houseprices.json")
-//     .then(map_data => {
-//         map_data = d3.nest()
-//         .key(item => item.year)
-//         .key(item => item.county)
-//         .object(map_data);
-        
-//     if (map_data[year][county]){
-        
-//         medianListPrice = map_data[year][county][0].median_price;
-//         document.getElementById("price-title").innerHTML = "Median List Price: $" + numberWithCommas(parseInt(medianListPrice));
-//         addMedianPriceColorBar(medianListPrice);
-//     }
-// })
-// .catch(e => console.log(e));
-// }
-
-// function addMedianPriceColorBar(num){
-//     var categories = ["No Data", "< $200,000", "$200,000-$300,000", "$300,000-$400,000", "> $400,000"];
-//     var colors = ["#eee", "#bae4b3", "#74c476", "#31a354", "#006d2c"];
-    
-//     var colorScale = d3.scaleOrdinal().domain(categories).range(colors);
-//     let i = 0;
-
-//     if (!isNumeric(num)) {
-//         i = 0;
-//     } else if (num < 200000) {
-//         i = 1;
-//     } else if (num < 300000) {
-//         i = 2;
-//     } else if (num < 400000) {
-//         i = 3;
-//     } else {
-//         i = 4;
-//     }
-
-//     let currcolor = colorScale(categories[i]);
-    
-//     let txt = document.getElementById('price-title');
-//     txt.style.textDecoration = "underline";
-//     txt.style.textDecorationColor = currcolor;
-
-// }
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

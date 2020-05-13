@@ -10,7 +10,7 @@ $(document).ready(function() {
                 // update HTML attribute so current county is accessible
                 document.getElementById("dropdown").setAttribute("county", this.value);
                 selectedCounty = this.value;
-                createOverviewChart(data, selectedCounty, 2011);
+                createOverviewChart(data, selectedCounty, currentYear.toString());
             })
 
 
@@ -20,7 +20,6 @@ $(document).ready(function() {
 
 function createOverviewChart(data, county, currYear) {
     $("#funding-overview").empty();
-
     var chart = document.getElementById("funding-overview");
 
     var currmargin = {
@@ -49,6 +48,12 @@ function createOverviewChart(data, county, currYear) {
         .append("g")
         .attr("transform",
             "translate(" + currmargin.left + "," + currmargin.top + ")");
+
+    // Append Div for tooltip to SVG
+    var div = d3.select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
     // console.log(currwidth)
     // console.log(currheight + currmargin.top + currmargin.bottom)
@@ -84,6 +89,8 @@ function createOverviewChart(data, county, currYear) {
         .attr('text-anchor', 'middle')
         .text('Spending per student($)')
 
+
+
     // Bars
     svgChart.selectAll("bars")
         .data(data)
@@ -101,27 +108,25 @@ function createOverviewChart(data, county, currYear) {
             })
             .attr("fill", function(d) {
                 if (d.NAME == county) return "purple";
-                else return "#1f77b4"
+                else return "rgb(252, 141, 98)";//"#1f77b4";
             })
-            .on('mouseenter', function(actual, i) {
-                d3.selectAll('.value')
-                    .attr('opacity', 0)
+            .on("mouseover", function(d) {
+                $(".tooltip").empty();
+                console.log("Hello");
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
 
-                const countyY = y(actual.PPCSTOT)
-                //console.log("selected", actual, countyY);
-
-                svgChart.append('line')
-                    .attr('id', 'line-limit')
-                    .attr('x1', 0)
-                    .attr('y1', countyY)
-                    .attr('x2', currwidth)
-                    .attr('y2', countyY);
-
+                $(".tooltip")
+                    .append(ret_val = getPrettyName(d.NAME) + " Public Schools <hr> $" + numberWithCommas(d.PPCSTOT))
+                    .css("left", (d3.event.pageX) + "px")
+                    .css("top", (d3.event.pageY - 28) + "px")
+                
             })
-        .on('mouseleave', function() {
-            svgChart.select("#line-limit").remove()
-
-        })
-
+            .on("mouseout", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
 
 };

@@ -69,7 +69,8 @@ function makeSpendingChart(allData, county, year) {
 
     var color = d3.scaleOrdinal()
         .domain(graphData.map(d => d.name))
-        .range(d3.schemeCategory10);
+        .range(["rgb(252, 141, 98)","rgb(102, 194, 165)","rgb(141, 160, 203)","rgb(231, 138, 195)","rgb(179, 179, 179)"]);
+        // .range(d3.schemeCategory10);
 
     d3.select(spend_chart)
         .selectAll("rect")
