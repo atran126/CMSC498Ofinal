@@ -289,7 +289,7 @@ function mapClicked() {
             county = "WASHINGTON CO SCHS";
             i = 9;
             break;
-        case "Baltimore":
+        case "BaltimoreCounty":
             county = "BALTIMORE COUNTY SCHOOLS";
             i = 10;
             break;
@@ -402,7 +402,7 @@ function dropdownChange() {
             i = 9;
             break;
         case "BALTIMORE COUNTY SCHOOLS":
-            county = "#Baltimore";
+            county = "#BaltimoreCounty";
             i = 10;
             break;
         case "CALVERT CO SCHS":
