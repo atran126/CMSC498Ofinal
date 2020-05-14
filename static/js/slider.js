@@ -10,7 +10,7 @@ d3.json("http://localhost:8080/../../data/yeardata.json")
     .catch((e) => console.log(e));
 
 function updateGraphs() {
-    d3.csv("http://localhost:8080/../../data/funding2011to2017.csv")
+    d3.csv("http://localhost:8080/../../data/new_school_data.csv")
         .then((data) => {
             console.log("slider > funding overview update");
 
