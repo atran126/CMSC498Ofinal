@@ -17,7 +17,7 @@
 <body>
     <div class="container">
         <h2>Visualizing School Funding & Housing Prices</h2>
-        <p></p>
+        <p>This interactive visualization allows users to see how housing prices, school funding, and school revenue change by year for each county. Users can also see student enrollment in various support services, such as Free and Reduced Price Meals (FARMS), Limited English Proficiency (LEP),  and Special Education. The main questions that a user can answer are: How do time and geographic location impact school funding? Is there a correlation between house price and school district funding? What are the differences in sources of revenue and student support service enrollment across counties?</p>
         <div id="dropdown-cont">
             <select county="default" id="dropdown">
                 <option value="se">Select county</option>
@@ -50,31 +50,8 @@
         <hr>
         <div class="row">
             <div class ="col-sm-8">
-                <div id="menu">
-                    <!-- <span class="h3">Metric</span>
-                    <hr> -->
-                    <!-- <form id="form" action="index.html" method="post">
-                        <section>
-                            <label>
-                                <input type="radio" name="metric" value="median_price" checked>
-                                <span class="radio"></span>
-                                <span class="label">Median Price</span>
-                            </label>
-                            <label>
-                                <input type="radio" name="metric" value="avg_school_rating">
-                                <span class="radio"></span>
-                                <span class="label">Average School Rating</span>
-                            </label>
-
-                        </section>
-
-                    </form> -->
-                    <!-- <div style="margin-top: 10px;"></div> -->
-
-                    <!-- <span class="h3">legend</span>
-                    <hr> -->
-                </div>
-
+                <div id="menu"></div>
+                <h4>Median House Price By County</h4>
                 <div id="map" class="col-sm-8"></div>
                 <div id="legend"></div>
                 <div id= "overview-container">
@@ -96,13 +73,8 @@
 
                     <div id = "text-box">
                         <h4 id = "county-title"></h1>
-<<<<<<< HEAD
                         <h5 id = "funding-title"> </h6>
                         
-=======
-                        <h6 id = "funding-title"> </h6>
-
->>>>>>> a1fc8c9d0a0dcf7329c1997171fb90fc83854591
                         <!-- <h6 id = "price-title"> </h6> -->
 
                     </div>

@@ -127,6 +127,8 @@ function createOverviewChart(data, county, currYear) {
                 div.transition()
                     .duration(500)
                     .style("opacity", 0);
+                svg.selectAll(".tooltip").remove()
+
             });
 
 };
