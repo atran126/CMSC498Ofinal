@@ -12,8 +12,6 @@ d3.json("http://localhost:8080/../../data/yeardata.json")
 function updateGraphs() {
     d3.csv("http://localhost:8080/../../data/new_school_data.csv")
         .then((data) => {
-            console.log("slider > funding overview update");
-
             var year = document.getElementById("time-div").getAttribute("year");
             var county = document.getElementById("dropdown").getAttribute("county");
 
@@ -32,12 +30,9 @@ function updateGraphs() {
             createOverviewChart(data, county, year);
             makeSpendingChart(data, county, year);
             makeRevenueChart(data, county, year);
-            updatePriceText(county, year);
 
         })
         .catch((e) => console.log(e));
-
-
 }
 
 function getYearData(allData, year) {

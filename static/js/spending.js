@@ -1,43 +1,26 @@
 $(document).ready(function() {
-
-    // var dropdown = document.getElementById("dropwdown");
-
-
     d3.csv("http://localhost:8080/../../data/new_school_data.csv")
         .then(jsonTuples => {
             makeSpendingChart(jsonTuples, defaultCounty, defaultYear.toString());
 
             $("#dropdown").change(function() {
-
-                // update HTML attribute so current county is accessible
-                // document.getElementById("dropdown").setAttribute("county", this.value);
-                // var year = document.getElementById("time-div").getAttribute("year");
                 var county = $(this).val();
                 makeSpendingChart(jsonTuples, county, currentYear.toString());
             });
-
-
         })
         .catch(e => console.log(e));
 })
 
-
-
-
-
 /* Retreives all data from a certain year for specified county */
 function getCountySData(allData, year, county) {
     for (var i = 0; i < allData.length; i++) {
-        //console.log(allData[i].NAME + " " + county + allData[i].Year + " " + parseInt(year));
         if (allData[i].Year === year && allData[i].NAME === county) {
             return allData[i];
         }
     }
 }
 
-
 /* Creates chart */
-
 function makeSpendingChart(allData, county, year) {
     var spend_chart = document.getElementById("spending");
     var margins = {
@@ -69,8 +52,7 @@ function makeSpendingChart(allData, county, year) {
 
     var color = d3.scaleOrdinal()
         .domain(graphData.map(d => d.name))
-        .range(["rgb(252, 141, 98)","rgb(102, 194, 165)","rgb(141, 160, 203)","rgb(231, 138, 195)","rgb(179, 179, 179)"]);
-        // .range(d3.schemeCategory10);
+        .range(["rgb(252, 141, 98)", "rgb(102, 194, 165)", "rgb(141, 160, 203)", "rgb(231, 138, 195)", "rgb(179, 179, 179)"]);
 
     d3.select(spend_chart)
         .selectAll("rect")
@@ -91,7 +73,6 @@ function makeSpendingChart(allData, county, year) {
             return ret_val;
 
         });
-
 
     // X-axis
 
@@ -145,38 +126,7 @@ function isolateSData(countyData) {
     obj.push(meals);
     obj.push(sp);
     obj.push(lep);
-    /*
-    var total = {};
-    total.name = "Total Expenditures";
-    total.value = countyData.farms;
-
-    var curr_spend = {};
-    curr_spend.name = "Total Spending";
-    curr_spend.value = countyData.TCURSPND;
-
-    var instr_spend = {};
-    instr_spend.name = "Instruction Spending";
-    instr_spend.value = countyData.TCURINST;
-
-    var support = {};
-    support.name = "Support Services";
-    support.value = countyData.TCURSSVC;
-
-    var capital_outlay = {};
-    capital_outlay.name = "Capital Outlay";
-    capital_outlay.value = countyData.TCAPOUT;
-
-    obj.push(total);
-    obj.push(curr_spend);
-    obj.push(instr_spend);
-    obj.push(support);
-    obj.push(capital_outlay);
-
-    */
     return obj;
-
-
-
 }
 
 function updateSpendingText(value) {

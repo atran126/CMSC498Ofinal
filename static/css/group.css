@@ -15,7 +15,7 @@ rect:hover {
   opacity: 0.7;
 }
 
-.label, a, p{
+.label, a, p {
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   font-size: 16px;
 }
@@ -53,4 +53,21 @@ path:hover{
 #form, select#dropdown  {
     position: relative;
     z-index: 999;
+}
+
+#revenue-breakdown {
+  transform: translate(0,50px)
+}
+
+#line-limit {
+  stroke: red;
+  stroke-width: 3;
+  stroke-dasharray: 3 6;
+}
+#overview-container{
+ transform: translate(0,-150px)
+}
+
+#small-charts {
+  transform: translate(0,-50px)
 }

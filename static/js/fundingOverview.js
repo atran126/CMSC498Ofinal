@@ -1,11 +1,9 @@
-
 // set the dimensions and margins of the graph
 var county = $("#dropdown").val();
-console.log(width);
 $(document).ready(function() {
     d3.csv("http://localhost:8080/data/new_school_data.csv")
         .then(data => {
-
+            createOverviewChart(data, defaultCounty, defaultYear.toString());
             $("#dropdown").change(function() {
                 // update HTML attribute so current county is accessible
                 document.getElementById("dropdown").setAttribute("county", this.value);
@@ -23,13 +21,13 @@ function createOverviewChart(data, county, currYear) {
     var chart = document.getElementById("funding-overview");
 
     var currmargin = {
-        top: 30,
-        right: 30,
-        bottom: 175,
-        left: 150
-    },
-    currwidth = 700- currmargin.left - currmargin.right,
-    currheight = 300 - currmargin.top - currmargin.bottom;
+            top: 30,
+            right: 30,
+            bottom: 175,
+            left: 150
+        },
+        currwidth = 700 - currmargin.left - currmargin.right,
+        currheight = 300 - currmargin.top - currmargin.bottom;
 
     // sort data
     data.sort(function(b, a) {
@@ -51,12 +49,10 @@ function createOverviewChart(data, county, currYear) {
 
     // Append Div for tooltip to SVG
     var div = d3.select("body")
-    .append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
-    // console.log(currwidth)
-    // console.log(currheight + currmargin.top + currmargin.bottom)
     // X axis
     var x = d3.scaleBand()
         .range([0, currwidth])
@@ -96,39 +92,37 @@ function createOverviewChart(data, county, currYear) {
         .data(data)
         .enter()
         .append("rect")
-            .attr("x", function(d) {
-                return x(d.NAME);
-            })
-            .attr("y", function(d) {
-                return y(d.PPCSTOT);
-            })
-            .attr("width", x.bandwidth())
-            .attr("height", function(d) {
-                return currheight - y(d.PPCSTOT);
-            })
-            .attr("fill", function(d) {
-                if (d.NAME == county) return "purple";
-                else return "rgb(252, 141, 98)";//"#1f77b4";
-            })
-            .on("mouseover", function(d) {
-                $(".tooltip").empty();
-                console.log("Hello");
-                div.transition()
-                    .duration(200)
-                    .style("opacity", .9);
+        .attr("x", function(d) {
+            return x(d.NAME);
+        })
+        .attr("y", function(d) {
+            return y(d.PPCSTOT);
+        })
+        .attr("width", x.bandwidth())
+        .attr("height", function(d) {
+            return currheight - y(d.PPCSTOT);
+        })
+        .attr("fill", function(d) {
+            if (d.NAME == county) return "purple";
+            else return "rgb(252, 141, 98)"; //"#1f77b4";
+        })
+        .on("mouseover", function(d) {
+            $(".tooltip").empty();
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
 
-                $(".tooltip")
-                    .append(ret_val = getPrettyName(d.NAME) + " Public Schools <hr> $" + numberWithCommas(d.PPCSTOT))
-                    .css("left", (d3.event.pageX) + "px")
-                    .css("top", (d3.event.pageY - 28) + "px")
-                
-            })
-            .on("mouseout", function(d) {
-                div.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-                svg.selectAll(".tooltip").remove()
+            $(".tooltip")
+                .append(ret_val = getPrettyName(d.NAME) + " Public Schools <hr> $" + numberWithCommas(d.PPCSTOT))
+                .css("left", (d3.event.pageX) + "px")
+                .css("top", (d3.event.pageY - 28) + "px")
+        })
+        .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+            svg.selectAll(".tooltip").remove()
 
-            });
+        });
 
 };
